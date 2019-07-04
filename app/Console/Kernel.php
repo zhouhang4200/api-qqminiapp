@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\FunSpider;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,6 +15,14 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        'App\Console\Commands\FunSpider', // 搞笑
+        'App\Console\Commands\FunUrlSpider',
+        'App\Console\Commands\EntSpider', // 娱乐
+        'App\Console\Commands\EntUrlSpider',
+//        'App\Console\Commands\GameSpider', // 游戏
+//        'App\Console\Commands\GameUrlSpider',
+//        'App\Console\Commands\ComicSpider', // 动漫
+//        'App\Console\Commands\ComicUrlSpider',
     ];
 
     /**
@@ -26,6 +35,14 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->command('fun:spider')->everyTenMinutes();
+        $schedule->command('fun_url:spider')->hourly();
+        $schedule->command('ent:spider')->everyTenMinutes();
+        $schedule->command('ent_url:spider')->hourly();
+//        $schedule->command('game:spider')->everyTenMinutes();
+//        $schedule->command('game_url:spider')->hourly();
+//        $schedule->command('comic:spider')->everyTenMinutes();
+//        $schedule->command('comic_url:spider')->hourly();
     }
 
     /**
