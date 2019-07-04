@@ -17,7 +17,7 @@ return [
         ],
         'fun'          => 'https://www.ixigua.com/channel/gaoxiao/', // 搞笑
         'ent'          => 'https://www.ixigua.com/api/feed/channel?_signature=DvzWWAAgEA.guokTHfzp2A781kAAFPm&channelId=61887739374&count=15&maxTime=1562213858', // 娱乐
-        'comic'        => 'https://v.qq.com/x/search/?q=%E5%8A%A8%E6%BC%AB&stag=0&smartbox_ab=&cur=', // 动漫
+        'comic'        => 'https://www.ixigua.com/api/search/complex/%E5%8A%A8%E6%BC%AB/20?_signature=AOSMoAAgEADuotPrH8DYZADkjLAAF3.', // 动漫
     ],
     'category'   => [
         'game'  => 1, // 游戏
