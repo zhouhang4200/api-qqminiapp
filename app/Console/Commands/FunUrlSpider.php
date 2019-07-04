@@ -61,7 +61,9 @@ class FunUrlSpider extends Command
         ]);
 
         // 获取数据库里面状态为0的所有的原始地址
-        Video::where('status', 0)->chunk(100, function ($chunks) use ($url, $browser) {
+        Video::where('status', 0)
+            ->where('category_id', 3)
+            ->chunk(100, function ($chunks) use ($url, $browser) {
             foreach ($chunks as $video) {
                 try {
                     $page = $browser->newPage();

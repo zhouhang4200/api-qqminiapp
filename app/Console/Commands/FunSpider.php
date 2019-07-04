@@ -109,6 +109,7 @@ class FunSpider extends Command
                             'original_url' => $url,
                             'url'          => '',
                             'play_times'   => 0,
+                            'source_id'    => 2, // 西瓜视频
                             'created_at'   => Carbon::now()->toDateTimeString(),
                             'updated_at'   => Carbon::now()->toDateTimeString(),
                         ];

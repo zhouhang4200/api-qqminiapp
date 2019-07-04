@@ -23,6 +23,7 @@ class CreateVideosTable extends Migration
             $table->string('original_url')->comment('视频链接地址');
             $table->string('url', 500)->comment('视频播放真实地址');
             $table->string('play_times')->comment('播放量');
+            $table->tinyInteger('source_id')->default(0)->comment('来源');
             $table->timestamps();
         });
     }
