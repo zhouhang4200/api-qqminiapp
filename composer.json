@@ -9,6 +9,9 @@
         "fideloper/proxy": "~3.3",
         "illuminate/http": "v5.5.0",
         "imangazaliev/didom": "^1.14",
+        "jaeger/querylist": "^4.1",
+        "jaeger/querylist-phantomjs": "^4.0",
+        "jaeger/querylist-puppeteer": "^4.0",
         "laravel/framework": "5.5.*",
         "laravel/passport": "~4.0",
         "laravel/tinker": "~1.0",
@@ -29,7 +32,10 @@
         ],
         "psr-4": {
             "App\\": "app/"
-        }
+        },
+        "files": [
+            "bootstrap/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

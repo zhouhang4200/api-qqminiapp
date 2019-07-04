@@ -15,10 +15,14 @@ class CreateVideosTable extends Migration
     {
         Schema::create('videos', function (Blueprint $table) {
             $table->increments('id');
+            $table->date('date');
+            $table->tinyInteger('status')->default(0)->comment('状态：0 不存在真实地址，1 已存在真实地址');
             $table->integer('category_id');
-            $table->string('title')->comment('标题');
-            $table->string('thumb')->comment('视频logo照');
-            $table->string('url')->comment('视频地址');
+            $table->string('title')->comment('视频标题');
+            $table->string('thumb')->comment('视频播放图片');
+            $table->string('original_url')->comment('视频链接地址');
+            $table->string('url', 500)->comment('视频播放真实地址');
+            $table->string('play_times')->comment('播放量');
             $table->timestamps();
         });
     }
