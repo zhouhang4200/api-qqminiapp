@@ -77,7 +77,7 @@ class FunSpider extends Command
                         $urlDoc = $document->first("a");
                         $imgDoc = $document->first('img');
 
-                        $baseUrl = config('spider.spider_url.fun_base_url');
+                        $baseUrl = config('spider.spider_url.xigua_base_url');
 
                         if (isset($urlDoc) && $urlDoc) {
                             $url   = $baseUrl . $urlDoc->getAttribute('href');
