@@ -45,7 +45,7 @@ class ComicSpider extends Command
     {
         try {
             while (true) {
-                $response = Request::get(config('spider.spider_url.ent'))
+                $response = Request::get(config('spider.spider_url.comic'))
                     ->addHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36')
                     ->addHeader('Cookie', 'tt_webid=6707093169689118215; xiguavideopcwebid=6707093163134649864; xiguavideopcwebid.sig=LEb5f42Asx_PqJ9zxaW3u8SGLP4; Hm_lvt_db8ae92f7b33b6596893cdf8c004a1a2=1561616846; SLARDAR_WEB_ID=5b6fd568-251e-41e7-b3ad-1328c8073e83; s_v_web_id=65a5bbff32d089d1512cdce3a34c974a; _ga=GA1.2.1771259702.1561616854; _gid=GA1.2.180337239.1561975032; RT="z=1&dm=ixigua.com&si=8a3brhees2d&ss=jxon6cey&sl=3&tt=0&obo=3"; _gat_gtag_UA_89504546_18=1; _gat_gtag_UA_138710293_1=1; Hm_lpvt_db8ae92f7b33b6596893cdf8c004a1a2=1562243761')
                     ->timeout(5)
