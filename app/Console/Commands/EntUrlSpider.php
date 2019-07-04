@@ -44,8 +44,8 @@ class EntUrlSpider extends Command
 
         $puppeteer = new Puppeteer([
             'debug'        => true,
-            'stop_timeout' => 6,
-            'read_timeout' => 30,
+            'stop_timeout' => 8,
+            'read_timeout' => 60,
             'idle_timeout' => 60,
         ]);
 

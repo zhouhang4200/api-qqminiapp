@@ -63,7 +63,7 @@ class EntSpider extends Command
                                 continue;
                             }
 
-                            $url   = $baseUrl . '/i' . $card->videoId;
+                            $url   = $baseUrl . '/i' . $card->videoId.'/';
                             $title = $card->videoTitle;
                             $thumb = $card->videoImage;
 
