@@ -56,16 +56,16 @@ class ComicSpider extends Command
                 $insert = [];
                 $baseUrl = config('spider.spider_url.xigua_base_url');
 
-                if ($result && isset($result->data->cards)) {
+                if ($result && isset($result->data->data->video)) {
                     foreach ($result->data->cards as $card) {
                         try {
-                            if (!$card->videoId || !$card->videoTitle || !$card->videoImage) {
+                            if (!$card->group_id || !$card->title || !$card->image) {
                                 continue;
                             }
 
-                            $url   = $baseUrl . '/i' . $card->videoId.'/';
-                            $title = $card->videoTitle;
-                            $thumb = $card->videoImage;
+                            $url   = $baseUrl . '/i' . $card->group_id.'/';
+                            $title = $card->title;
+                            $thumb = $card->image;
 
                             // 数据库是否有相同记录，有则跳过
                             $video = Video::where('category_id', config('spider.category.comic'))
