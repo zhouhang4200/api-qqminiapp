@@ -57,7 +57,7 @@ class ComicSpider extends Command
                 $baseUrl = config('spider.spider_url.xigua_base_url');
 
                 if ($result && isset($result->data->data->video)) {
-                    foreach ($result->data->cards as $card) {
+                    foreach ($result->data->data->video as $card) {
                         try {
                             if (!$card->group_id || !$card->title || !$card->image) {
                                 continue;
