@@ -47,6 +47,7 @@ class WzryFinalSpider extends Command
             'stop_timeout' => 10,
             'read_timeout' => 30,
             'idle_timeout' => 60,
+            'timeout' => 60
         ]);
 
         $browser = $puppeteer->launch([
