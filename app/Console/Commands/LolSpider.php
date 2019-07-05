@@ -129,7 +129,11 @@ class LolSpider extends Command
                     // 写入数据库
                     if ($insert && count($insert) > 0) {
                         DB::table('videos')->insert($insert);
-                        $this->url = end($insert)['original_url'];
+                        $this->url = end($insert)['original_url'] ?? '';
+
+                        if (!$this->url) {
+                            break;
+                        }
                     }
                 }
 
