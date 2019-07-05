@@ -50,21 +50,21 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->command('fun:spider')->everyTenMinutes();
-        $schedule->command('fun_final:spider')->hourly();
+        $schedule->command('fun_final:spider')->everyTenMinutes();
         $schedule->command('ent:spider')->everyTenMinutes();
-        $schedule->command('ent_final:spider')->hourly();
+        $schedule->command('ent_final:spider')->everyTenMinutes();
         $schedule->command('comic:spider')->everyTenMinutes();
-        $schedule->command('comic_final:spider')->hourly();
+        $schedule->command('comic_final:spider')->everyTenMinutes();
         $schedule->command('jdqs:spider')->everyTenMinutes();
-        $schedule->command('jdqs_final:spider')->hourly();
+        $schedule->command('jdqs_final:spider')->everyTenMinutes();
         $schedule->command('wzry:spider')->everyTenMinutes();
-        $schedule->command('wzry_final:spider')->hourly();
+        $schedule->command('wzry_final:spider')->everyTenMinutes();
         $schedule->command('lol:spider')->everyTenMinutes();
-        $schedule->command('lol_final:spider')->hourly();
+        $schedule->command('lol_final:spider')->everyTenMinutes();
         $schedule->command('dwrg:spider')->everyTenMinutes();
-        $schedule->command('dwrg_final:spider')->hourly();
+        $schedule->command('dwrg_final:spider')->everyTenMinutes();
         $schedule->command('hpjy:spider')->everyTenMinutes();
-        $schedule->command('hpjy_final:spider')->hourly();
+        $schedule->command('hpjy_final:spider')->everyTenMinutes();
     }
 
     /**
