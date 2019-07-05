@@ -15,7 +15,7 @@ class GameUrlSpider extends Command
      *
      * @var string
      */
-    protected $signature = 'game:spider';
+    protected $signature = 'game_url:spider';
 
     /**
      * The console command description.
