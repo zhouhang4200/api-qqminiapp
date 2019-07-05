@@ -56,7 +56,7 @@ class GameSpider extends Command
 
             $browser = $puppeteer->launch([
                 'args' => ['--no-sandbox', '--disable-setuid-sandbox'],
-                'executablePath' => '/usr/share/applications/chromium-browser.desktop'
+                'executablePath' => '/usr/lib64/chromium-browser/chromium-browser'
             ]);
 
             $page = $browser->newPage();
