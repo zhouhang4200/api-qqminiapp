@@ -47,7 +47,7 @@ class FunFinalSpider extends Command
 //                'debug'        => true,
                 'stop_timeout' => 10,
                 'read_timeout' => 60,
-                'idle_timeout' => 60,
+                'idle_timeout' => 65,
             ]);
 
             $browser = $puppeteer->launch([
@@ -62,7 +62,7 @@ class FunFinalSpider extends Command
                         try {
                             $page = $browser->newPage();
 
-                            $page->goto($video->original_url, ['timeout' => 60000]);
+                            $page->goto($video->original_url, ['timeout' => 65000]);
                             $html = $page->content(); // Prints the HTML
 
                             $document = new Document();

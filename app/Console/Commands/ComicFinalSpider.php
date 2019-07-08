@@ -46,7 +46,7 @@ class ComicFinalSpider extends Command
             $puppeteer = new Puppeteer([
 //                'debug'        => true,
                 'stop_timeout' => 10,
-                'read_timeout' => 30,
+                'read_timeout' => 60,
                 'idle_timeout' => 60,
                 'timeout' => 60
             ]);
@@ -63,7 +63,7 @@ class ComicFinalSpider extends Command
                         try {
                             $page = $browser->newPage();
 
-                            $page->goto($video->original_url);
+                            $page->goto($video->original_url, ['timeout' => 60000]);
                             $html = $page->content(); // Prints the HTML
 
                             $document = new Document();
