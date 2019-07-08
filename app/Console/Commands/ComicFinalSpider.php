@@ -87,7 +87,7 @@ class ComicFinalSpider extends Command
 //                                $video->delete();
                                 continue;
                             }
-//                            sleep(3);
+                            sleep(3);
                         } catch (\Exception $e) {
 //                            $video->delete();
                             myLog('comic_final_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第二处
