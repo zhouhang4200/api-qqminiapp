@@ -123,7 +123,7 @@ class FunSpider extends Command
                             ];
 
                         } catch (\Exception $e) {
-                            myLog('fun_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第三处
+                            myLog('fun_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第三处
                             continue;
                         }
                     }
@@ -141,7 +141,7 @@ class FunSpider extends Command
                 sleep(3);
             }
         } catch (\Exception $e) {
-            myLog('fun_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第四处
+            myLog('fun_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第四处
         }
     }
 
@@ -250,7 +250,7 @@ class FunSpider extends Command
 //                        ];
 //
 //                    } catch (\Exception $e) {
-//                        myLog('fun_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
+//                        myLog('fun_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
 //                        continue;
 //                    }
 //                }
@@ -258,7 +258,7 @@ class FunSpider extends Command
 //                DB::table('videos')->insert($insert);
 //            }
 //        } catch (\Exception $e) {
-//            myLog('fun_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
+//            myLog('fun_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
 //        }
 //    }
 }

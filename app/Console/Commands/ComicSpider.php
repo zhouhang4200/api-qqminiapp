@@ -123,7 +123,7 @@ class ComicSpider extends Command
                             ];
 
                         } catch (\Exception $e) {
-                            myLog('comic_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第三处
+                            myLog('comic_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第三处
                             continue;
                         }
                     }
@@ -141,7 +141,7 @@ class ComicSpider extends Command
                 sleep(3);
             }
         } catch (\Exception $e) {
-            myLog('comic_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第四处
+            myLog('comic_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第四处
         }
     }
 
@@ -224,7 +224,7 @@ class ComicSpider extends Command
 //                                'updated_at'   => Carbon::now()->toDateTimeString(),
 //                            ];
 //                        } catch (\Exception $e) {
-//                            myLog('comic_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
+//                            myLog('comic_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
 //                            continue;
 //                        }
 //                    }
@@ -235,7 +235,7 @@ class ComicSpider extends Command
 //                sleep(3);
 //            }
 //        } catch (\Exception $e) {
-//            myLog('comic_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
+//            myLog('comic_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
 //        }
 //
 ////        try {
@@ -312,7 +312,7 @@ class ComicSpider extends Command
 ////                            ];
 ////
 ////                        } catch (\Exception $e) {
-////                            myLog('comic_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
+////                            myLog('comic_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
 ////                            continue;
 ////                        }
 ////                    }
@@ -323,7 +323,7 @@ class ComicSpider extends Command
 ////
 ////
 ////        } catch (\Exception $e) {
-////            myLog('comic_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
+////            myLog('comic_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
 ////        }
 //    }
 }

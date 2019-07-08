@@ -122,7 +122,7 @@ class WzrySpider extends Command
                             ];
 
                         } catch (\Exception $e) {
-                            myLog('wzry_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第三处
+                            myLog('wzry_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第三处
                             continue;
                         }
                     }
@@ -140,7 +140,7 @@ class WzrySpider extends Command
                 sleep(3);
             }
         } catch (\Exception $e) {
-            myLog('wzry_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第四处
+            myLog('wzry_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第四处
         }
     }
 }

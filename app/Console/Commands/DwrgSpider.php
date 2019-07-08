@@ -122,7 +122,7 @@ class DwrgSpider extends Command
                             ];
 
                         } catch (\Exception $e) {
-                            myLog('dwrg_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第三处
+                            myLog('dwrg_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第三处
                             continue;
                         }
                     }
@@ -140,7 +140,7 @@ class DwrgSpider extends Command
                 sleep(3);
             }
         } catch (\Exception $e) {
-            myLog('dwrg_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第四处
+            myLog('dwrg_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第四处
         }
     }
 }

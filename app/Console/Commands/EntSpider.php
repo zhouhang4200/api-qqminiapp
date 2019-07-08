@@ -123,7 +123,7 @@ class EntSpider extends Command
                             ];
 
                         } catch (\Exception $e) {
-                            myLog('ent_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第三处
+                            myLog('ent_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第三处
                             continue;
                         }
                     }
@@ -141,7 +141,7 @@ class EntSpider extends Command
                 sleep(3);
             }
         } catch (\Exception $e) {
-            myLog('ent_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第四处
+            myLog('ent_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第四处
         }
     }
 //    /**
@@ -223,7 +223,7 @@ class EntSpider extends Command
 //                                'updated_at'   => Carbon::now()->toDateTimeString(),
 //                            ];
 //                        } catch (\Exception $e) {
-//                            myLog('ent_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
+//                            myLog('ent_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
 //                            continue;
 //                        }
 //                    }
@@ -234,7 +234,7 @@ class EntSpider extends Command
 //                sleep(3);
 //            }
 //        } catch (\Exception $e) {
-//            myLog('ent_original_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
+//            myLog('ent_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
 //        }
 //    }
 }
