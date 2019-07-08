@@ -1,6 +1,7 @@
 <?php
 
-namespace App;
+namespace App\Models;
+
 
 use App\Models\Category;
 use Illuminate\Notifications\Notifiable;

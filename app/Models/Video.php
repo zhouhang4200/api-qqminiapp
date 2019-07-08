@@ -14,4 +14,44 @@ class Video extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    /**
+     * socpe 查询
+     *
+     * @param $query
+     * @param array $filters
+     * @return mixed
+     */
+    public static function scopeFilter($query, $filters = [])
+    {
+        if (isset($filters['category_id'])) {
+            $query->where('category_id', $filters['category_id']);
+        }
+
+        if (isset($filters['date'])) {
+            $query->whereBetween('date', $filters['date']);
+        }
+
+        if (isset($filters['openid'])) {
+            $user = User::where('openid', $filters['openid'])->first();
+
+            if (!$user) {
+                $user = User::create([
+                    'name' => '',
+                    'email' => '',
+                    'password' => '',
+                    'phone' => '',
+                    'openid' => $filters['openid'],
+                    'qq' => '',
+                    'nickname' => '',
+                    'unionid' => '',
+                ]);
+            }
+            $userCategoryIds = UserCategory::where('user_id', $user->id)->pluck('category_id');
+
+            $query->whereIn('category_id', $userCategoryIds);
+        }
+
+        return $query->where('status', 1);
+    }
 }

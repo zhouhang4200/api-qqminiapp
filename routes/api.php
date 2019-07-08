@@ -16,3 +16,13 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// 回调接口
+Route::prefix('video', function () {
+    Route::post('/', 'VideoController@index'); // 视频
+    Route::post('subscribe', 'VideoController@subscribe'); // 订阅
+    Route::post('category', 'VideoController@category'); // 分类
+    Route::post('search', 'VideoController@search'); // 查找
+});
+
+
