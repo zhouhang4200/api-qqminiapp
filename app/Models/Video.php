@@ -28,6 +28,10 @@ class Video extends Model
             $query->where('category_id', $filters['category_id']);
         }
 
+        if (isset($filters['title'])) {
+            $query->where('title', 'like', '%'.$filters['title'].'%');
+        }
+
         if (isset($filters['date'])) {
             $query->whereBetween('date', $filters['date']);
         }
@@ -52,6 +56,6 @@ class Video extends Model
             $query->whereIn('category_id', $userCategoryIds);
         }
 
-        return $query->where('status', 1);
+        return $query->where('status', 0);
     }
 }

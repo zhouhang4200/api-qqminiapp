@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'api_domain' => env('API_DOMAIN', 'api.miniapp.test'),
     'source' => [
         1 => 'https://m.v.qq.com',
         2 => 'https://ixigua.com'

@@ -16,7 +16,8 @@
         "laravel/passport": "~4.0",
         "laravel/tinker": "~1.0",
         "nategood/httpful": "^0.2.20",
-        "paragonie/random_compat": "2.*"
+        "paragonie/random_compat": "2.*",
+        "techone/ldoc": "^0.4.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

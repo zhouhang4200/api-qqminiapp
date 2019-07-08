@@ -14,5 +14,5 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('spider', 'Home\SpiderController@spider');
+//
+//Route::get('spider', 'Home\SpiderController@spider');
