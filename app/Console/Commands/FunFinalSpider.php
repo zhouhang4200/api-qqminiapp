@@ -62,7 +62,7 @@ class FunFinalSpider extends Command
                         try {
                             $page = $browser->newPage();
 
-                            $page->goto($video->original_url, ['timeout' => 65000]);
+                            $page->goto($video->original_url);
                             $html = $page->content(); // Prints the HTML
 
                             $document = new Document();

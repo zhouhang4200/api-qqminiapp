@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\UserCategory;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -40,10 +41,11 @@ class VideoController extends Controller
             $category_id = $request->input('category_id');
             $openid = $request->input('openid');
 
-            $filters = compact('category_id');
-
-            $videos = Video::filter($filters)
-                ->paginate(15);
+            UserCategory::updateOrCreated([
+                'openid' => $openid
+            ], [
+                'openid' => $openid
+            ]);
 
             return response()->json([
                 'status' => 0,
