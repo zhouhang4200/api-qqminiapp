@@ -87,7 +87,7 @@ class JdqsFinalSpider extends Command
 //                                $video->delete();
                                 continue;
                             }
-                            sleep(3);
+                            sleep(mt_rand(4, 9));
                         } catch (\Exception $e) {
 //                            $video->delete();
                             myLog('jdqs_final_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第二处
