@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Video;
+use Carbon\Carbon;
 use DiDom\Document;
 use Illuminate\Console\Command;
 use Nesk\Puphpeteer\Puppeteer;
@@ -81,6 +82,7 @@ class DwrgFinalSpider extends Command
                             // 写入数据库
                             if ($url) {
                                 $video->status = 1;
+                                $video->date = Carbon::now()->toDateString();
                                 $video->url    = $url;
                                 $video->save();
                             } else {
