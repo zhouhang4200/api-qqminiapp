@@ -44,7 +44,7 @@ class WzryFinalSpider extends Command
             $url = '';
 
             $puppeteer = new Puppeteer([
-                'debug'        => true,
+//                'debug'        => true,
                 'stop_timeout' => 10,
                 'read_timeout' => 30,
                 'idle_timeout' => 60,
@@ -74,7 +74,7 @@ class WzryFinalSpider extends Command
                                 $url = $urlDoc->getAttribute('src');
                             } else {
                                 myLog('wzry_final_spider_error', ['src不存在！']); // 改第二处
-                                $video->delete();
+//                                $video->delete();
                                 continue;
                             }
 
@@ -84,12 +84,12 @@ class WzryFinalSpider extends Command
                                 $video->url    = $url;
                                 $video->save();
                             } else {
-                                $video->delete();
+//                                $video->delete();
                                 continue;
                             }
                             sleep(3);
                         } catch (\Exception $e) {
-                            $video->delete();
+//                            $video->delete();
                             myLog('wzry_final_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第三处
                             continue;
                         }

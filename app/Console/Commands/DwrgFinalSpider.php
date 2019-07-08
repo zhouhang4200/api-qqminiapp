@@ -44,7 +44,7 @@ class DwrgFinalSpider extends Command
             $url = '';
 
             $puppeteer = new Puppeteer([
-                'debug'        => true,
+//                'debug'        => true,
                 'stop_timeout' => 10,
                 'read_timeout' => 30,
                 'idle_timeout' => 60,
@@ -74,7 +74,7 @@ class DwrgFinalSpider extends Command
                                 $url = $urlDoc->getAttribute('src');
                             } else {
                                 myLog('dwrg_final_spider_error', ['src不存在！']); // 改第二处
-                                $video->delete();
+//                                $video->delete();
                                 continue;
                             }
 
@@ -89,7 +89,7 @@ class DwrgFinalSpider extends Command
                             }
                             sleep(3);
                         } catch (\Exception $e) {
-                            $video->delete();
+//                            $video->delete();
                             myLog('dwrg_final_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第二处
                             continue;
                         }
