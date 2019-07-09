@@ -45,10 +45,11 @@ class EntSpider extends Command
     public function handle()
     {
         try {
-            $thumb     = ''; // 视频照
-            $url       = '';
-            $title     = '';
-            $play_time = '';
+            $thumb      = ''; // 视频照
+            $url        = '';
+            $title      = '';
+            $play_time  = '';
+            $play_count = '0';
 
             while (true) {
                 if ($this->url) {
@@ -76,10 +77,15 @@ class EntSpider extends Command
                 if (is_array($documents) && count($documents) > 0) {
                     foreach ($documents as $k => $document) {
                         try {
-                            $urlDoc  = $document->first("a");
-                            $imgDoc  = $document->first('img');
-                            $timeDoc = $document->first('span');
-                            $baseUrl = config('spider.spider_url.xigua_base_url');
+                            $urlDoc       = $document->first("a");
+                            $imgDoc       = $document->first('img');
+                            $timeDoc      = $document->first('span');
+                            $baseUrl      = config('spider.spider_url.xigua_base_url');
+                            $playCountDoc = $document->first('.bottom-txt span');
+
+                            if ($playCountDoc) {
+                                $play_count = $playCountDoc->text() ?? '0';
+                            }
 
                             if (isset($timeDoc) && $timeDoc) {
                                 $play_time = $timeDoc->text() ?? '';
@@ -99,7 +105,7 @@ class EntSpider extends Command
                                 continue;
                             }
                             // 数据库是否有相同记录，有则跳过
-                            $video = Video::where('category_id', config('spider.category.ent')) // 改第五处
+                            $video = Video::where('category_id', config('spider.category.ent'))// 改第五处
                             ->where('original_url', $url)
                                 ->first();
 
@@ -115,8 +121,8 @@ class EntSpider extends Command
                                 'thumb'        => $thumb,
                                 'original_url' => $url,
                                 'url'          => '',
-                                'play_time'     => $play_time,
-                                'play_count'   => 0,
+                                'play_time'    => $play_time,
+                                'play_count'   => $play_count,
                                 'source_id'    => 2, // 西瓜视频
                                 'created_at'   => Carbon::now()->toDateTimeString(),
                                 'updated_at'   => Carbon::now()->toDateTimeString(),

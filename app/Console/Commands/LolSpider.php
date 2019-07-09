@@ -48,6 +48,7 @@ class LolSpider extends Command
             $url       = '';
             $title     = '';
             $play_time = '';
+            $play_count = '';
 
             while (true) {
                 if ($this->url) {
@@ -79,6 +80,11 @@ class LolSpider extends Command
                             $imgDoc  = $document->first('img');
                             $timeDoc = $document->first('span');
                             $baseUrl = config('spider.spider_url.xigua_base_url');
+                            $playCountDoc = $document->first('.bottom-txt span');
+
+                            if ($playCountDoc) {
+                                $play_count = $playCountDoc->text() ?? '0';
+                            }
 
                             if (isset($timeDoc) && $timeDoc) {
                                 $play_time = $timeDoc->text() ?? '';
@@ -115,7 +121,7 @@ class LolSpider extends Command
                                 'original_url' => $url,
                                 'url'          => '',
                                 'play_time'     => $play_time,
-                                'play_count'   => 0,
+                                'play_count'   => $play_count,
                                 'source_id'    => 2, // 西瓜视频
                                 'created_at'   => Carbon::now()->toDateTimeString(),
                                 'updated_at'   => Carbon::now()->toDateTimeString(),

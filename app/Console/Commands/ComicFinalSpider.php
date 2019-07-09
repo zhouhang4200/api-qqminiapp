@@ -71,6 +71,7 @@ class ComicFinalSpider extends Command
                             $document = new Document();
                             $doc      = $document->load($html);
                             $urlDoc   = $doc->first('video');
+                            $playCount = $doc->first(".playerContainer .view_counts");
 
                             if ($urlDoc) {
                                 $url = $urlDoc->getAttribute('src');
@@ -83,6 +84,7 @@ class ComicFinalSpider extends Command
                             // 写入数据库
                             if ($url) {
                                 $video->status = 1;
+                                $video->play_count = $playCount->text() ?? 0;
                                 $video->date = Carbon::now()->toDateString();
                                 $video->url    = $url;
                                 $video->save();

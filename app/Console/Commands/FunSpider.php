@@ -146,7 +146,6 @@ class FunSpider extends Command
 //    }
 
 
-
 //    /**
 //     * The name and signature of the console command.
 //     *
@@ -177,10 +176,11 @@ class FunSpider extends Command
     public function handle()
     {
         try {
-            $thumb = ''; // 视频照
-            $url   = '';
-            $title = '';
-            $play_time = '';
+            $thumb        = ''; // 视频照
+            $original_url = '';
+            $title        = '';
+            $play_time    = '';
+            $play_count   = 0;
 
             $puppeteer = new Puppeteer([
                 'debug'        => true,
@@ -194,13 +194,13 @@ class FunSpider extends Command
             ]);
 
             $page = $browser->newPage();
-            $page->goto('https://www.ixigua.com/channel/gaoxiao/');
+            $page->goto(config('spider.spider_url.fun'));
 //            $page->click('.arrow arrow-right .icon-enter');
 //            $page->waite(5);
             $html = $page->content(); // Prints the
 //            dd($html);
-            $document = new Document();
-            $doc      = $document->load($html);
+            $document  = new Document();
+            $doc       = $document->load($html);
             $documents = $doc->find('.cards-flex .card-container'); // 数组
 //            dd($documents);
             $insert = [];
@@ -209,18 +209,23 @@ class FunSpider extends Command
             if (is_array($documents) && count($documents) > 0) {
                 foreach ($documents as $k => $document) {
                     try {
-                        $urlDoc = $document->first("a");
-                        $imgDoc = $document->first('img');
-                        $timeDoc = $document->first('span');
-
                         $baseUrl = config('spider.spider_url.xigua_base_url');
+                        $urlDoc       = $document->first("a");
+                        $imgDoc       = $document->first('img');
+                        $timeDoc      = $document->first('span');
+                        $playCountDoc = $document->first('.bottom-txt span');
+
+                        if ($playCountDoc) {
+                            $play_count = $playCountDoc->text() ?? '0';
+                        }
+
                         if (isset($timeDoc) && $timeDoc) {
                             $play_time = $timeDoc->text() ?? '';
                         }
 
                         if (isset($urlDoc) && $urlDoc) {
-                            $url   = $baseUrl . $urlDoc->getAttribute('href');
-                            $title = $urlDoc->getAttribute('title');
+                            $original_url = $baseUrl . $urlDoc->getAttribute('href');
+                            $title        = $urlDoc->getAttribute('title');
                         }
 
                         if (isset($imgDoc) && $imgDoc) {
@@ -228,47 +233,78 @@ class FunSpider extends Command
                         }
 
                         // 没有找到则跳过
-                        if (!$url || !$title || !$thumb) {
+                        if (!$original_url || !$title || !$thumb) {
                             continue;
                         }
+
                         // 数据库是否有相同记录，有则跳过
-                        $video = Video::where('category_id', config('spider.category.fun')) // 改第五处
-                        ->where('original_url', $url)
+                        $video = Video::where('category_id', config('spider.category.fun'))// 改第五处
+                        ->where('original_url', $original_url)
                             ->first();
 
                         if ($video) {
                             continue;
                         }
 
-                        $insert[] = [
+                        sleep(3);
+                        $page = $browser->newPage();
+                        $page->goto($original_url);
+                        $html   = $page->content(); // Prints the
+                        $document  = new Document();
+                        $doc    = $document->load($html);
+                        $urlDoc = $doc->first('video');
+
+                        if ($urlDoc) {
+                            $url = $urlDoc->getAttribute('src');
+                        } else {
+                            myLog('fun_final_spider_error', ['src不存在！']); // 改第二处
+//                                $video->delete();
+                            continue;
+                        }
+
+//                        $insert[] = [
+//                            'date'         => Carbon::now()->toDateString(),
+//                            'status'       => 1,
+//                            'category_id'  => config('spider.category.fun'), // 改第二处
+//                            'title'        => $title,
+//                            'thumb'        => $thumb,
+//                            'original_url' => $url,
+//                            'url'          => $url,
+//                            'play_time'    => $play_time,
+//                            'play_count'   => $play_count,
+//                            'source_id'    => 2, // 西瓜视频
+//                            'created_at'   => Carbon::now()->toDateTimeString(),
+//                            'updated_at'   => Carbon::now()->toDateTimeString(),
+//                        ];
+                        Video::create([
                             'date'         => Carbon::now()->toDateString(),
-                            'status'       => 0,
+                            'status'       => 1,
                             'category_id'  => config('spider.category.fun'), // 改第二处
                             'title'        => $title,
                             'thumb'        => $thumb,
-                            'original_url' => $url,
-                            'url'          => '',
-                            'play_time'     => $play_time,
-                            'play_count'   => 0,
+                            'original_url' => $original_url,
+                            'url'          => $url,
+                            'play_time'    => $play_time,
+                            'play_count'   => $play_count,
                             'source_id'    => 2, // 西瓜视频
                             'created_at'   => Carbon::now()->toDateTimeString(),
                             'updated_at'   => Carbon::now()->toDateTimeString(),
-                        ];
-
+                        ]);
+                        sleep(3);
                     } catch (\Exception $e) {
                         myLog('fun_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第三处
                         continue;
                     }
                 }
-                // 写入数据库
-                if ($insert && count($insert) > 0) {
-                    DB::table('videos')->insert($insert);
-                    $this->url = end($insert)['original_url'] ?? '';
-
-//                        if (!$this->url) {
-//                            break;
-//                        }
-                }
+//                // 写入数据库
+//                if ($insert && count($insert) > 0) {
+//                    DB::table('videos')->insert($insert);
+//                    $this->url = end($insert)['original_url'] ?? '';
+//
+////                        if (!$this->url) {
+////                            break;
+////                        }
+//                }
             }
 //            sleep(3);
         } catch (\Exception $e) {

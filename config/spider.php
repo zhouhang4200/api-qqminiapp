@@ -16,8 +16,8 @@ return [
             'jdqs' => 'https://www.ixigua.com/i6709236154866074125/', // 绝地求生
             'dwrg' => 'https://www.ixigua.com/i6709318423500816910/', // 第五人格
         ],
-        'fun'          => 'https://www.ixigua.com/i6533362934725214734/', // 搞笑
-        'ent'          => 'https://www.ixigua.com/i6710048847986426381/', // 娱乐
+        'fun'          => 'https://www.ixigua.com/channel/gaoxiao/', // 搞笑
+        'ent'          => 'https://www.ixigua.com/channel/yule/', // 娱乐
 //        'ent'          => 'https://www.ixigua.com/api/feed/channel?_signature=DvzWWAAgEA.guokTHfzp2A781kAAFPm&channelId=61887739374&count=15&maxTime=1562213858', // 娱乐
         'comic'        => 'https://www.ixigua.com/i6706705261110755854/', // 动漫
 //        'comic'        => 'https://www.ixigua.com/api/search/complex/%E5%8A%A8%E6%BC%AB/20?_signature=AOSMoAAgEADuotPrH8DYZADkjLAAF3.', // 动漫

@@ -20,7 +20,7 @@ class CreateVideosTable extends Migration
             $table->integer('category_id');
             $table->string('title')->comment('视频标题');
             $table->string('thumb')->comment('视频播放图片');
-            $table->string('original_url')->comment('视频链接地址');
+            $table->string('original_url', 500)->comment('视频链接地址');
             $table->string('url', 500)->comment('视频播放真实地址');
             $table->string('play_count')->comment('播放量');
             $table->string('play_time')->comment('播放时长');
