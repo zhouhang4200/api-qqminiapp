@@ -22,15 +22,15 @@ class VideoController extends Controller
 
             return response()->json([
                 'status' => 0,
-                'message' => '获取成功',
+                'info' => '获取成功',
                 'data' => $videos
             ]);
         } catch (\Exception $e) {
-            myLog('video_error', ['message' => '【'.$e->getLine().'】:'.$e->getMessage()]);
+            myLog('video_error', ['info' => '【'.$e->getLine().'】:'.$e->getMessage()]);
 
             return response()->json([
                 'status' => 10000,
-                'message' => '服务器异常',
+                'info' => '服务器异常',
                 'data' => false
             ]);
         }

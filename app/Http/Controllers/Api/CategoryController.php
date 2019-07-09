@@ -20,11 +20,11 @@ class CategoryController extends Controller
         try {
             $data = Category::get();
 
-            return response()->json(['code' => 0, 'data' => $data, 'message' => 'success']);
+            return response()->json(['status' => 0, 'data' => $data, 'info' => 'success']);
         } catch (\Exception $e) {
             myLog('category_error', ['data' => $e->getMessage()]);
 
-            return response()->json(['code' => 10000, 'data' => '', 'message' => '服务器异常']);
+            return response()->json(['status' => 10000, 'data' => '', 'info' => '服务器异常']);
         }
     }
 
@@ -43,11 +43,11 @@ class CategoryController extends Controller
 
             $data = $user->categories()->attach($categoryIds);
 
-            return response()->json(['code' => 0, 'data' => $user, 'message' => 'success']);
+            return response()->json(['status' => 0, 'data' => $user, 'info' => 'success']);
         } catch (\Exception $e) {
             myLog('category_error', ['data' => $e->getMessage()]);
 
-            return response()->json(['code' => 10000, 'data' => '', 'message' => '服务器异常']);
+            return response()->json(['status' => 10000, 'data' => '', 'info' => '服务器异常']);
         }
     }
 }

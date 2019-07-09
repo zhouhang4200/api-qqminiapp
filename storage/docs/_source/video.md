@@ -3,7 +3,7 @@
 
 #### 请求
 
-`POST` /api/video
+`POST` /video
 
 #### 请求参数
 
@@ -16,7 +16,7 @@
 ```
 {
     "status": 0,
-    "message": "获取成功",
+    "info": "获取成功",
     "data": {
         "current_page": 1,
         "data": [
@@ -82,7 +82,7 @@
 ```
 {
     "status": 0,
-    "message": "获取成功",
+    "info": "获取成功",
     "data": {
         "current_page": 1,
         "data": [

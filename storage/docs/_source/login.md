@@ -15,8 +15,8 @@
 
 ```
 {
-    "code": 0,
-    "message": "success",
+    "status": 0,
+    "info": "success",
     "data": {
         'openid':'asdasda',
         'token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjQxMWIzMmVjZGUxZDAwMTNmNWE4Y2MwMTY5ZTBmZmI5Mjk2ODk5NjBkM2E4NzdlNDg1ODIzNjk5YWMwNmUwYTc2ZjgxY2E5ODUwYWYwYzM0In0'

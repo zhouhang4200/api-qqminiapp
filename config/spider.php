@@ -45,4 +45,9 @@ return [
 //        'class'   => '.cards-flex  .card-container', // 要查找的类标签，查找original_url
 //        'element' => 'video',  // 需要精确查找的标签，查找url
 //    ],
+
+    'qq_mini_app' => [
+        'appid' => '1109092867',
+        'secret' => '',
+    ],
 ];

@@ -13,7 +13,7 @@
 
 ```
 {
-    "code": 0,
+    "status": 0,
     "data": [
         {
             "id": 1,
@@ -61,7 +61,7 @@
             "name": "第五人格",
         }
     ],
-    "message": "success"
+    "info": "success"
 }
 ```
 ### 用户订阅
@@ -79,9 +79,9 @@
 #### 响应
 ```
 {
-    "code": 0,
+    "status": 0,
     "data": [
     ],
-    "message": "success"
+    "info": "success"
 }
 ```
