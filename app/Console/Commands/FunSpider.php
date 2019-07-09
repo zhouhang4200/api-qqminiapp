@@ -198,7 +198,7 @@ class FunSpider extends Command
 //            $page->click('.arrow arrow-right .icon-enter');
 //            $page->waite(5);
             $html = $page->content(); // Prints the
-            dd($html);
+//            dd($html);
             $document = new Document();
             $doc      = $document->load($html);
             $documents = $doc->find('.cards-flex .card-container'); // 数组
