@@ -19,13 +19,15 @@ use Illuminate\Http\Request;
 
 // 回调接口
 Route::prefix('video')->group(function () {
-    Route::post('/', 'VideoController@index'); // 视频
-    Route::post('search', 'VideoController@search'); // 查找
+    Route::get('/', 'VideoController@index'); // 视频
+    Route::get('search', 'VideoController@search'); // 查找
+    Route::get('recommend', 'VideoController@recommend'); // 查找
 });
 
 Route::prefix('category')->group(function () {
-    Route::post('/', 'CategoryController@index'); // 视频
-    Route::post('subscribe', 'VideoController@subscribe'); // 订阅
+    Route::get('/', 'CategoryController@index'); // 视频
+    Route::post('subscribe', 'CategoryController@subscribe'); // 订阅
+    Route::get('user', 'CategoryController@user'); // 订阅的数据
 });
 
 Route::post('login', 'LoginController@login')->name('login');

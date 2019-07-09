@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-
-use App\Models\Category;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
@@ -32,6 +30,6 @@ class User extends Authenticatable
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'user_categories', 'category_id', 'user_id');
+        return $this->belongsToMany(Category::class, 'user_categories', 'user_id', 'category_id');
     }
 }
