@@ -58,6 +58,7 @@ class ComicFinalSpider extends Command
 
             // 获取数据库里面状态为0的所有的原始地址
             Video::where('status', 0)
+                ->where('date', Carbon::now()->toDateString())
                 ->where('category_id', config('spider.category.comic')) // 改第一处
                 ->chunk(100, function ($chunks) use ($url, $browser) {
                     foreach ($chunks as $video) {
