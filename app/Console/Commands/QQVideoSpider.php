@@ -41,9 +41,15 @@ class QQVideoSpider extends Command
     {
         $date      = Carbon::now()->toDateString();
         // 获取所有的除了游戏的分类
-        $categories = Category::where('id', '!=', 1)->get();
+        $categories = Category::whereNotIn('id', [1, 2])->get();
 
         foreach ($categories as $category) {
+            $count = Video::where('category_id', $category->id)->where('date', $date)->count();
+//            dd($count);
+            if ($count > 200) {
+                continue;
+            }
+
             $timestamp = Carbon::now()->subHours(1)->timestamp;
             for ($i = 1; $i < 20; $i++) {
                 $page = 15 * $i;
