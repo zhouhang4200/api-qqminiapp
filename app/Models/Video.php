@@ -26,7 +26,12 @@ class Video extends Model
     public static function scopeFilter($query, $filters = [])
     {
         if (isset($filters['category_id'])) {
-            $query->where('category_id', $filters['category_id']);
+            if ($filters['category_id'] == 4) { // 动漫取所有
+                $categoryIds = Category::find(4)->children()->pluck('id')->merge(4);
+                $query->whereIn('category_id', $categoryIds);
+            } else {
+                $query->where('category_id', $filters['category_id']);
+            }
         }
 
         if (isset($filters['title'])) {
