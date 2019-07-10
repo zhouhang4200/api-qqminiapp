@@ -50,8 +50,8 @@ class QQVideoSpider extends Command
                 continue;
             }
 
-            $timestamp = Carbon::now()->subHours(1)->timestamp;
             for ($i = 1; $i < 20; $i++) {
+                $timestamp = Carbon::now()->subHours(1)->timestamp;
                 $page = 15 * $i;
                 try {
                     // 第一步：获取视频id
