@@ -43,6 +43,7 @@ class WzryFinalSpider extends Command
     {
         try {
             $url = '';
+            $proxy = 's1.proxy.mayidaili.com:8123';
 
             $puppeteer = new Puppeteer([
 //                'debug'        => true,
@@ -53,16 +54,28 @@ class WzryFinalSpider extends Command
             ]);
 
             $browser = $puppeteer->launch([
-                'args' => ['--no-sandbox', '--disable-setuid-sandbox'],
+                'ignoreHTTPSErrors' => true,
+                'args'              => ['--no-sandbox', '--disable-setuid-sandbox', '--proxy-server=' . $proxy],
             ]);
 
             // 获取数据库里面状态为0的所有的原始地址
             Video::where('status', 0)
                 ->where('date', Carbon::now()->toDateString())
                 ->where('category_id', config('spider.category.wzry')) // 改第一处
-                ->chunk(100, function ($chunks) use ($url, $browser) {
+                ->chunk(100, function ($chunks) use ($url, $browser, $puppeteer, $proxy) {
                     foreach ($chunks as $video) {
                         try {
+//                            $browser   = $puppeteer->launch([
+//                                'ignoreHTTPSErrors' => true,
+//                                'args'              => ['--no-sandbox', '--disable-setuid-sandbox', '--proxy-server=' . $proxy],
+//                            ]);
+
+                            $auth = $this->sign();
+                            $page = $browser->newPage();
+                            $page->setExtraHTTPHeaders([
+                                "Mayi-Authorization" => " {$auth}",
+                            ]);
+
                             $page = $browser->newPage();
 
                             $page->goto($video->original_url, ['timeout' => 60000]);
@@ -106,5 +119,39 @@ class WzryFinalSpider extends Command
 
         }
 
+    }
+
+    /**
+     * 获取 sign
+     *
+     * @return string
+     */
+    public function sign()
+    {
+        //AppKey 信息，请替换
+        $appKey = '70357409';
+        //AppSecret 信息，请替换
+        $secret = 'e7e5b19b8858f8278a01e953b4f77632';
+        //示例请求参数
+        $paramMap = array(
+            'app_key'   => $appKey,
+            'timestamp' => date('Y-m-d H:i:s')
+        );
+        //按照参数名排序
+        ksort($paramMap);
+        //连接待加密的字符串
+        $codes = $secret;
+
+        //请求的URL参数
+        $auth = 'MYH-AUTH-MD5 ';
+        foreach ($paramMap as $key => $val) {
+            $codes .= $key . $val;
+            $auth  .= $key . '=' . $val . '&';
+        }
+        $codes .= $secret;
+        //签名计算
+        $auth .= 'sign=' . strtoupper(md5($codes));
+
+        return $auth;
     }
 }

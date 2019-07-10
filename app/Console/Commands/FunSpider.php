@@ -65,7 +65,7 @@ class FunSpider extends Command
 //                    ->send();
 //
 //                $html = $response->body;
-//
+////                dd($html);
 //                $document  = new Document();
 //                $doc       = $document->load($html);
 //                $documents = $doc->find(config('spider.document.class')); // 数组
@@ -96,11 +96,13 @@ class FunSpider extends Command
 //
 //                            // 没有找到则跳过
 //                            if (!$url || !$title || !$thumb) {
+//                                myLog('fun_url_spider_error', ['地址不存在']); // 改第三处
 //                                continue;
 //                            }
+//
 //                            // 数据库是否有相同记录，有则跳过
 //                            $video = Video::where('category_id', config('spider.category.fun')) // 改第五处
-//                            ->where('original_url', $url)
+//                                ->where('original_url', $url)
 //                                ->first();
 //
 //                            if ($video) {
@@ -246,67 +248,67 @@ class FunSpider extends Command
                             continue;
                         }
 
-                        sleep(3);
-                        $page = $browser->newPage();
-                        $page->goto($original_url);
-                        $html   = $page->content(); // Prints the
-                        $document  = new Document();
-                        $doc    = $document->load($html);
-                        $urlDoc = $doc->first('video');
+//                        sleep(3);
+//                        $page = $browser->newPage();
+//                        $page->goto($original_url);
+//                        $html   = $page->content(); // Prints the
+//                        $document  = new Document();
+//                        $doc    = $document->load($html);
+//                        $urlDoc = $doc->first('video');
+//
+//                        if ($urlDoc) {
+//                            $url = $urlDoc->getAttribute('src');
+//                        } else {
+//                            myLog('fun_final_spider_error', ['src不存在！']); // 改第二处
+////                                $video->delete();
+//                            continue;
+//                        }
 
-                        if ($urlDoc) {
-                            $url = $urlDoc->getAttribute('src');
-                        } else {
-                            myLog('fun_final_spider_error', ['src不存在！']); // 改第二处
-//                                $video->delete();
-                            continue;
-                        }
-
-//                        $insert[] = [
+                        $insert[] = [
+                            'date'         => Carbon::now()->toDateString(),
+                            'status'       => 0,
+                            'category_id'  => config('spider.category.fun'), // 改第二处
+                            'title'        => $title,
+                            'thumb'        => $thumb,
+                            'original_url' => $original_url,
+                            'url'          => '',
+                            'play_time'    => $play_time,
+                            'play_count'   => $play_count,
+                            'source_id'    => 2, // 西瓜视频
+                            'created_at'   => Carbon::now()->toDateTimeString(),
+                            'updated_at'   => Carbon::now()->toDateTimeString(),
+                        ];
+//                        Video::create([
 //                            'date'         => Carbon::now()->toDateString(),
 //                            'status'       => 1,
 //                            'category_id'  => config('spider.category.fun'), // 改第二处
 //                            'title'        => $title,
 //                            'thumb'        => $thumb,
-//                            'original_url' => $url,
+//                            'original_url' => $original_url,
 //                            'url'          => $url,
 //                            'play_time'    => $play_time,
 //                            'play_count'   => $play_count,
 //                            'source_id'    => 2, // 西瓜视频
 //                            'created_at'   => Carbon::now()->toDateTimeString(),
 //                            'updated_at'   => Carbon::now()->toDateTimeString(),
-//                        ];
-                        Video::create([
-                            'date'         => Carbon::now()->toDateString(),
-                            'status'       => 1,
-                            'category_id'  => config('spider.category.fun'), // 改第二处
-                            'title'        => $title,
-                            'thumb'        => $thumb,
-                            'original_url' => $original_url,
-                            'url'          => $url,
-                            'play_time'    => $play_time,
-                            'play_count'   => $play_count,
-                            'source_id'    => 2, // 西瓜视频
-                            'created_at'   => Carbon::now()->toDateTimeString(),
-                            'updated_at'   => Carbon::now()->toDateTimeString(),
-                        ]);
-                        sleep(3);
+//                        ]);
+//                        sleep(3);
                     } catch (\Exception $e) {
                         myLog('fun_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]); // 改第三处
                         continue;
                     }
                 }
-//                // 写入数据库
-//                if ($insert && count($insert) > 0) {
-//                    DB::table('videos')->insert($insert);
+                // 写入数据库
+                if ($insert && count($insert) > 0) {
+                    DB::table('videos')->insert($insert);
 //                    $this->url = end($insert)['original_url'] ?? '';
-//
-////                        if (!$this->url) {
-////                            break;
-////                        }
-//                }
+
+//                        if (!$this->url) {
+//                            break;
+//                        }
+                }
             }
-//            sleep(3);
+            sleep(3);
         } catch (\Exception $e) {
             myLog('fun_url_spider_error', ["【" . $e->getLine() . "】" . $e->getMessage()]);
         }
