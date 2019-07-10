@@ -8,7 +8,6 @@ use DiDom\Document;
 use GuzzleHttp\Client;
 use Httpful\Request;
 use Illuminate\Console\Command;
-use mysql_xdevapi\Exception;
 
 class QQGameSpider extends Command
 {

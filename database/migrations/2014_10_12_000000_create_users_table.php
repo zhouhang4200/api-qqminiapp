@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
             $table->string('qq')->nullable()->comment('用户qq');
             $table->string('nickname')->nullable()->comment('小程序昵称');
-            $table->string('email')->nullable();
+            $table->string('token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
