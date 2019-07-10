@@ -29,10 +29,10 @@ class LoginController extends Controller
             $user = User::find(1);
             $token = $user->createToken('qq_mini_app_jrhk')->accessToken;
 
-            $data['openid'] = $user->openid;
-            $data['token'] = $token;
+//            $data['openid'] = $user->openid;
+//            $data['token'] = $token;
 
-            return response()->json(['status' => 0, 'data' => $data, 'info' => 'success']);
+            return response()->json(['status' => 0, 'data' => $token, 'info' => 'success']);
 
             $appId = config('spider.qq_mini_app.appid');
             $secret = config('spider.qq_mini_app.secret');
@@ -64,9 +64,9 @@ class LoginController extends Controller
 
                 $token = $user->createToken('qq_mini_app_jrhk')->accessToken;
 
-                $data['openid'] = $openId;
+//                $data['openid'] = $openId;
 
-                return response()->json(['status' => 0, 'data' => ['openid' => $openId, 'token' => $token], 'info' => 'success']);
+                return response()->json(['status' => 0, 'data' => $token, 'info' => 'success']);
             } elseif (is_array($result) && isset($result['errcode'])) {
                 return response()->json(['status' => 10000, 'info' => $result['errmsg']]);
             }
