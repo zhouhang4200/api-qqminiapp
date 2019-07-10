@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Video extends Model
 {
@@ -36,26 +37,12 @@ class Video extends Model
             $query->whereBetween('date', $filters['date']);
         }
 
-        if (isset($filters['openid'])) {
-            $user = User::where('openid', $filters['openid'])->first();
-
-            if (!$user) {
-                $user = User::create([
-                    'name' => '',
-                    'email' => '',
-                    'password' => '',
-                    'phone' => '',
-                    'openid' => $filters['openid'],
-                    'qq' => '',
-                    'nickname' => '',
-                    'unionid' => '',
-                ]);
-            }
-            $userCategoryIds = UserCategory::where('user_id', $user->id)->pluck('category_id');
+        if ($user = Auth::guard('api')->user()) {
+            $userCategoryIds = $user->categories()->pluck('id');
 
             $query->whereIn('category_id', $userCategoryIds);
         }
 
-        return $query->where('status', 0);
+        return $query->where('status', 1);
     }
 }

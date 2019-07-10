@@ -26,7 +26,14 @@ class LoginController extends Controller
                 throw new QqException('code参数缺失');
             }
 
-            $user = Auth::guard('api')->user() ?? '';
+            $user = User::find(1);
+            $token = $user->createToken('qq_mini_app_jrhk')->accessToken;
+
+            $data['openid'] = $user->openid;
+            $data['token'] = $token;
+
+            return response()->json(['status' => 0, 'data' => $data, 'info' => 'success']);
+
             $appId = config('spider.qq_mini_app.appid');
             $secret = config('spider.qq_mini_app.secret');
 
@@ -40,10 +47,9 @@ class LoginController extends Controller
                 $openId = $result['openid'];
                 $sessionKey = $result['session_key'];
 
-                if ($user) {
-                    $user->wechat_open_id = $openId;
-                    $user->save();
-                } else {
+                $user = User::where('open_id', $openId)->first();
+
+                if (!$user) {
                     $user = User::create([
                         'name' => '',
                         'email' => '',

@@ -6,6 +6,7 @@ use App\Models\UserCategory;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class VideoController extends Controller
 {
@@ -18,6 +19,7 @@ class VideoController extends Controller
             $filters = compact('category_id', 'title');
 
             $videos = Video::filter($filters)
+                ->with('category')
                 ->paginate(15);
 
             return response()->json([
@@ -45,14 +47,21 @@ class VideoController extends Controller
     public function recommend(Request $request)
     {
         try {
-            $category_id = $request->input('category_id');
-            $title = $request->input('title');
+            $video_id = $request->input('video_id');
 
-            $filters = compact('category_id', 'title');
+            if (!$video_id) {
+                return response()->json([
+                    'status' => 10000,
+                    'info' => '参数不可为空',
+                    'data' => false
+                ]);
+            }
 
-            $videos = Video::filter($filters)
-                ->offset(20)
-                ->limit(15)
+            $videos = Video::filter([])
+                ->with('category')
+                ->where('id', '>', $video_id)
+                ->oldest('id')
+                ->take(15)
                 ->get();
 
             return response()->json([

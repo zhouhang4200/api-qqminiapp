@@ -43,7 +43,6 @@ class CategoryController extends Controller
             $categoryIds = explode(',', $request->input('category_id'));
 
             $user = Auth::guard('api')->user();
-//            $user = User::find(1);
 
             $data = $user->categories()->sync($categoryIds);
 
@@ -64,9 +63,8 @@ class CategoryController extends Controller
     public function user(Request $request)
     {
         try {
-//            $user = Auth::guard('api')->user();
-            $user = User::find(1);
-//        dd($user->categories);
+            $user = Auth::guard('api')->user();
+
             $data = $user->load('categories');
 
             return response()->json(['status' => 0, 'data' => $data, 'info' => 'success']);
