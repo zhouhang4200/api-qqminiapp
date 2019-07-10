@@ -39,7 +39,7 @@ class QQVideoSpider extends Command
      */
     public function handle()
     {
-        $date      = Carbon::now()->toDateString();
+        $date = Carbon::now()->toDateString();
         // 获取所有的除了游戏的分类
         $categories = Category::whereNotIn('id', [1, 2])->get();
 
@@ -70,6 +70,7 @@ class QQVideoSpider extends Command
                             $play_count   = $data->data[0]->playCount;
                             $thumb        = $data->data[0]->posterPic;
                             $original_url = $data->data[0]->webPlayUrl;
+                            $play_time    = $data->data[0]->duration;
                             // 去重
                             if (!$video = Video::where('original_url', $original_url)->first()) {
                                 $video = new Video();
@@ -88,11 +89,11 @@ class QQVideoSpider extends Command
                                     $videoExtension = $videoInfo->fn;
                                     $videoKey       = $videoInfo->fvkey;
 //                                    dd($videoInfo->ul->ui[0]->url);
-                                    $baseUrl        = $videoInfo->ul->ui[0]->url;
-                                    $time           = Carbon::now()->toDateTimeString();
+                                    $baseUrl = $videoInfo->ul->ui[0]->url;
+                                    $time    = Carbon::now()->toDateTimeString();
 
                                     if ($videoExtension && $videoKey) {
-                                        $url = $baseUrl.$videoExtension . '?vkey=' . $videoKey;
+                                        $url = $baseUrl . $videoExtension . '?vkey=' . $videoKey;
 //                                        dd($url);
                                         $video->url          = $url;
                                         $video->title        = $title;
@@ -101,7 +102,7 @@ class QQVideoSpider extends Command
                                         $video->date         = $date;
                                         $video->category_id  = $category->id;
                                         $video->original_url = $original_url;
-                                        $video->play_time    = '';
+                                        $video->play_time    = $play_time;
                                         $video->source_id    = 1; // 腾讯
                                         $video->status       = 1;
                                         $video->created_at   = $time;
