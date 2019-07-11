@@ -68,7 +68,7 @@ class Kernel extends ConsoleKernel
 //        $schedule->command('hpjy:spider')->everyTenMinutes();
 //        $schedule->command('hpjy_final:spider')->everyTenMinutes();
         $schedule->command('qq:video')->hourly();
-        $schedule->command('qq:game')->twiceDaily(0, 1);
+        $schedule->command('qq:game')->hourly();
     }
 
     /**

@@ -27,8 +27,8 @@ class LoginController extends Controller
             }
 
             $user = User::find(1);
-            $token = $user->createToken('qq_mini_app_jrhk')->accessToken;
-
+//            $token = $user->createToken('qq_mini_app_jrhk')->accessToken;
+                $token = $user->token;
 //            $data['openid'] = $user->openid;
 //            $data['token'] = $token;
 
@@ -52,7 +52,7 @@ class LoginController extends Controller
                 if (!$user) {
                     $user = User::create([
                         'name' => '',
-                        'email' => '',
+                        'token' => md5($openId),
                         'password' => '',
                         'phone' => '',
                         'openid' => $openId,

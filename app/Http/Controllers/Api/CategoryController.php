@@ -41,8 +41,10 @@ class CategoryController extends Controller
     {
         try {
             $categoryIds = explode(',', $request->input('category_id'));
+            $token = $request->input('token');
 
-            $user = Auth::guard('api')->user();
+//            $user = Auth::guard('api')->user();
+            $user = user::where('token', $token)->first();
 
             $data = $user->categories()->sync($categoryIds);
 
@@ -63,7 +65,9 @@ class CategoryController extends Controller
     public function user(Request $request)
     {
         try {
-            $user = Auth::guard('api')->user();
+            $token = $request->input('token');
+            $user = user::where('token', $token)->first();
+//            $user = Auth::guard('api')->user();
 
             $data = $user->load('categories');
 

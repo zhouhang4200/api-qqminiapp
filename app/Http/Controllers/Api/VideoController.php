@@ -15,8 +15,9 @@ class VideoController extends Controller
         try {
             $category_id = $request->input('category_id');
             $title = $request->input('title');
+            $token = $request->input('token');
 
-            $filters = compact('category_id', 'title');
+            $filters = compact('category_id', 'title', 'token');
 
             $videos = Video::filter($filters)
                 ->with('category')
@@ -48,6 +49,8 @@ class VideoController extends Controller
     {
         try {
             $video_id = $request->input('video_id');
+            $token = $request->input('token');
+            $filters = compact('token');
 
             if (!$video_id) {
                 return response()->json([
@@ -57,7 +60,7 @@ class VideoController extends Controller
                 ]);
             }
 
-            $videos = Video::filter([])
+            $videos = Video::filter($filters)
                 ->with('category')
                 ->where('id', '>', $video_id)
                 ->oldest('id')

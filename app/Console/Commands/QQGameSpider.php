@@ -8,6 +8,7 @@ use DiDom\Document;
 use GuzzleHttp\Client;
 use Httpful\Request;
 use Illuminate\Console\Command;
+use Nesk\Puphpeteer\Puppeteer;
 
 class QQGameSpider extends Command
 {
@@ -69,6 +70,7 @@ class QQGameSpider extends Command
         $infoContent  = $infoResponse->getBody()->getContents();
 //        dd($infoContent);
 
+        // 视频图片和视频id
         preg_match_all('~class=\\\"poster\\\" dsrc=\\\"(.*?)\\\"~', $infoContent, $thumbs);
         preg_match_all('~data-vid=\\\"(.*?)\\\"\>~', $infoContent, $video_ids);
 
@@ -126,13 +128,22 @@ class QQGameSpider extends Command
             }
         }
 
-        preg_match_all('~\<div class=\\\"hide\\\"\>responsedata=\/\*\{&quot\;channelTag&quot\;\:\&quot\;recreation\&quot\;\,\&quot\;pageContext\&quot\;\:&quot\;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot\;\,\&quot\;hasNextPage&quot\;\:true\}\*\/\<\/div\>~', $infoContent, $matches);
+        if ($category_id == 2) {
+            preg_match_all('~\<div class=\"hide\"\>responsedata=\/\*\{&quot\;channelTag&quot\;\:\&quot\;recreation\&quot\;\,\&quot\;pageContext\&quot\;\:&quot\;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot\;\,\&quot\;hasNextPage&quot\;\:true\}\*\/\<\/div\>~', $html, $matches);
+        } elseif ($category_id == 1) {
+//                    preg_match_all('~\<div class=\"hide\"\>responsedata=\/\*\{\&quot\;channelTag&quot\;\:\&quot\;recreation\&quot\;\,\&quot\;pageContext\&quot\;\:&quot\;(.*?)\&quot\;\,\&quot\;refreshContext\&quot\;\:\&quot\;(.*?)&quot\;\,&quot\;hasNextPage&quot\;\:true\}\*\/\<\/div\>~', $html, $matches);
+            preg_match_all('~\<div class=\"hide\"\>responsedata=\/\*\{&quot;channelTag&quot;:&quot;game&quot;,&quot;pageContext&quot;:&quot;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot;,&quot;hasNextPage&quot;:true\}\*\/\<\/div\>~', $html, $matches);
+        }
+
+//        preg_match_all('~\<div class=\\\"hide\\\"\>responsedata=\/\*\{&quot\;channelTag&quot\;\:\&quot\;recreation\&quot\;\,\&quot\;pageContext\&quot\;\:&quot\;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot\;\,\&quot\;hasNextPage&quot\;\:true\}\*\/\<\/div\>~', $infoContent, $matches);
 //        dd($matches);
-        if ($matches && count($matches) > 0) {
+        if ($matches && count($matches) > 0 && count($matches[1]) > 0) {
             $pageContext = $matches[1][0];
             $refreshContext = $matches[2][0];
             $this->getList($category_id, $pageContext, $refreshContext, $date);
         }
+
+        return true;
     }
 
     /**
@@ -148,38 +159,59 @@ class QQGameSpider extends Command
 
         foreach ($baseUrls as $category_id => $baseUrl) {
             $timestamp = Carbon::now()->timestamp;
-
+            echo $category_id;
             try {
                 // 第一次爬原始页面，找数据
+//                $puppeteer = new Puppeteer([
+////                'debug'        => true,
+//                    'stop_timeout' => 10,
+//                    'read_timeout' => 60,
+//                    'idle_timeout' => 60,
+//                    'timeout' => 60
+//                ]);
+//
+//                $browser = $puppeteer->launch([
+//                    'args' => ['--no-sandbox', '--disable-setuid-sandbox'],
+//                ]);
+//
+//                $page = $browser->newPage();
+//                $page->setExtraHTTPHeaders([
+//                    "Origin" => "https://m.v.qq.com",
+//                    "Referer" => $baseUrl,
+//                    "User-Agent" => "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1",
+//                ]);
+//
+//                $page->goto($baseUrl, ['timeout' => 60000]);
+//                $html = $page->content(); // Prints the HTML
+
                 $response = Request::get($baseUrl)
                     ->addHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36')
                     ->timeout(5)
                     ->send();
 
                 $html = $response->body;
-//                dd($html);
+
                 if ($category_id == 2) {
                     preg_match_all('~\<div class=\"hide\"\>responsedata=\/\*\{&quot\;channelTag&quot\;\:\&quot\;recreation\&quot\;\,\&quot\;pageContext\&quot\;\:&quot\;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot\;\,\&quot\;hasNextPage&quot\;\:true\}\*\/\<\/div\>~', $html, $matches);
                 } elseif ($category_id == 1) {
-//                    preg_match_all('~\<div class=\"hide\"\>responsedata=\/\*\{\&quot\;channelTag&quot\;\:\&quot\;recreation\&quot\;\,\&quot\;pageContext\&quot\;\:&quot\;(.*?)\&quot\;\,\&quot\;refreshContext\&quot\;\:\&quot\;(.*?)&quot\;\,&quot\;hasNextPage&quot\;\:true\}\*\/\<\/div\>~', $html, $matches);
                     preg_match_all('~\<div class=\"hide\"\>responsedata=\/\*\{&quot;channelTag&quot;:&quot;game&quot;,&quot;pageContext&quot;:&quot;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot;,&quot;hasNextPage&quot;:true\}\*\/\<\/div\>~', $html, $matches);
                 } else {
                     continue;
                 }
 //                dd($matches);
-                if ($matches && count($matches) > 0) {
+                if ($matches && count($matches) > 0 && count($matches[1]) > 0) {
                     $pageContext = $matches[1][0];
                     $refreshContext = $matches[2][0];
                     // 如果其中一个分类条数大于200，则返回false，这边跳出循环，循环下一个分类
                     $result = $this->getList($category_id, $pageContext, $refreshContext, $date);
 
-                    if (!$result) {
-                        continue;
-                    }
+//                    if (!$result) {
+//                        continue;
+//                    }
                 }
             } catch (\Exception $e) {
                 myLog('qq_game_error', ['data' => $e->getLine().$e->getMessage()]);
-//                dd($e->getLine().$e->getMessage());
+                dd($e->getLine().'行:'.$e->getMessage());
                 continue;
             }
 

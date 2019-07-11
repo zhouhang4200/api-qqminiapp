@@ -42,11 +42,17 @@ class Video extends Model
             $query->whereBetween('date', $filters['date']);
         }
 
-        if ($user = Auth::guard('api')->user()) {
+        if (isset($filters['token'])) {
+            $user = user::where('token', $filters['token'])->first();
             $userCategoryIds = $user->categories()->pluck('id');
-
             $query->whereIn('category_id', $userCategoryIds);
         }
+
+//        if ($user = Auth::guard('api')->user()) {
+//            $userCategoryIds = $user->categories()->pluck('id');
+//
+//            $query->whereIn('category_id', $userCategoryIds);
+//        }
 
         return $query->where('status', 1);
     }
