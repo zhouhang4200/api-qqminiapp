@@ -66,7 +66,7 @@ class Kernel extends ConsoleKernel
 //        $schedule->command('dwrg_final:spider')->everyTenMinutes();
 //        $schedule->command('hpjy:spider')->everyTenMinutes();
 //        $schedule->command('hpjy_final:spider')->everyTenMinutes();
-        $schedule->command('qq:video')->daily();
+        $schedule->command('qq:video')->hourly();
     }
 
     /**
