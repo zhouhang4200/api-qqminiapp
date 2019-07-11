@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('qq:video')->hourly();
         $schedule->command('qq:game')->hourly();
-        $schedule->command('delete:video')->daily();
+        $schedule->command('qq:delete')->daily();
     }
 
     /**

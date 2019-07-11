@@ -13,14 +13,14 @@ class DeleteVideoOverDate extends Command
      *
      * @var string
      */
-    protected $signature = 'delete:video';
+    protected $signature = 'qq:delete';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '删除2天前过期视频';
+    protected $description = '删除4小时前过期视频';
 
     /**
      * Create a new command instance.
@@ -40,9 +40,9 @@ class DeleteVideoOverDate extends Command
     public function handle()
     {
         try {
-            $date = Carbon::now()->subDays(2)->toDateString();
+            $time = Carbon::now()->subHours(4)->toDateTimeString();
 
-            Video::where('date', '<', $date)->delete();
+            Video::where('updated_at', '<', $time)->delete();
         } catch (\Exception $e) {
             myLog('delete_video_error', ['data' => $e->getLine().'行：'.$e->getMessage()]);
         }
