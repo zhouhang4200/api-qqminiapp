@@ -43,7 +43,7 @@ class Video extends Model
         }
 
         if (isset($filters['token'])) {
-            $user = user::where('token', $filters['token'])->first();
+            $user = User::where('token', $filters['token'])->first();
             $userCategoryIds = $user->categories()->pluck('id');
             $query->whereIn('category_id', $userCategoryIds);
         }
