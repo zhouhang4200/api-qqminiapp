@@ -132,11 +132,12 @@ class QQGameSpider extends Command
             preg_match_all('~\<div class=\\\"hide\\\"\>responsedata=\/\*\{&quot\;channelTag&quot\;\:\&quot\;recreation\&quot\;\,\&quot\;pageContext\&quot\;\:&quot\;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot\;\,\&quot\;hasNextPage&quot\;\:true\}\*\/\<\/div\>~', $infoContent, $matches);
         } elseif ($category_id == 1) {
 //                    preg_match_all('~\<div class=\"hide\"\>responsedata=\/\*\{\&quot\;channelTag&quot\;\:\&quot\;recreation\&quot\;\,\&quot\;pageContext\&quot\;\:&quot\;(.*?)\&quot\;\,\&quot\;refreshContext\&quot\;\:\&quot\;(.*?)&quot\;\,&quot\;hasNextPage&quot\;\:true\}\*\/\<\/div\>~', $html, $matches);
-            preg_match_all('~\<div class=\"hide\"\>responsedata=\/\*\{&quot;channelTag&quot;:&quot;game&quot;,&quot;pageContext&quot;:&quot;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot;,&quot;hasNextPage&quot;:true\}\*\/\<\/div\>~', $infoContent, $matches);
+//            preg_match_all('~\<div class=\\\"hide\\"\>responsedata=\/\*\{&quot;channelTag&quot;:&quot;game&quot;,&quot;pageContext&quot;:&quot;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot;,&quot;hasNextPage&quot;:true\}\*\/\<\/div\>~', $infoContent, $matches);
+            preg_match_all('~\<div class=\\\"hide\\\"\>responsedata=\/\*\{&quot;channelTag&quot;:&quot;game&quot;,&quot;pageContext&quot;:&quot;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot;,&quot;hasNextPage&quot;:true\}\*\/\<\/div\>~', $infoContent, $matches);
         } else {
             $matches = [];
         }
-
+        dd($infoContent, $matches);
         if ($matches && count($matches) > 0 && count($matches[1]) > 0) {
             $pageContext    = $matches[1][0];
             $refreshContext = $matches[2][0];
