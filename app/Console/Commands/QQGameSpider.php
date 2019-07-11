@@ -159,7 +159,7 @@ class QQGameSpider extends Command
 
         foreach ($baseUrls as $category_id => $baseUrl) {
             $timestamp = Carbon::now()->timestamp;
-            echo $category_id;
+//            echo $category_id;
             try {
                 // 第一次爬原始页面，找数据
 //                $puppeteer = new Puppeteer([
@@ -211,7 +211,7 @@ class QQGameSpider extends Command
                 }
             } catch (\Exception $e) {
                 myLog('qq_game_error', ['data' => $e->getLine().$e->getMessage()]);
-                dd($e->getLine().'行:'.$e->getMessage());
+//                dd($e->getLine().'行:'.$e->getMessage());
                 continue;
             }
 
