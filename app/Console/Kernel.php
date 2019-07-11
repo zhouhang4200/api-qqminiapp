@@ -27,9 +27,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('qq:video')->hourly();
-        $schedule->command('qq:game')->hourly();
-        $schedule->command('qq:delete')->daily();
+        $schedule->command('qq:video')->everyTenMinutes();
+        $schedule->command('qq:game')->everyTenMinutes();
+        $schedule->command('qq:delete')->everyTenMinutes();
     }
 
     /**
