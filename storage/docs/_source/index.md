@@ -3,7 +3,7 @@
 
 #### 参数说明
 
-测试地址（hosts中需要添加 10.0.4.44  miniapp.test ）: http://api.miniapp.test/api
+测试地址（hosts中需要添加 10.0.4.44  api.miniapp.test ）: http://api.miniapp.test/api
 
 #### 认证流程
 
