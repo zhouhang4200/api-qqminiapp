@@ -22,7 +22,7 @@ class QQVideoSpider extends Command
      *
      * @var string
      */
-    protected $description = '腾讯视频爬虫';
+    protected $description = '腾讯视频二级分类爬虫';
 
     /**
      * Create a new command instance.
@@ -45,7 +45,7 @@ class QQVideoSpider extends Command
 
         foreach ($categories as $category) {
             $count = Video::where('category_id', $category->id)->where('date', $date)->count();
-//            dd($count);
+
             if ($count > 200) {
                 continue;
             }
@@ -62,9 +62,7 @@ class QQVideoSpider extends Command
                     $json      = $this->jsonpDecode($content);
 
                     if ($json->errCode == 0 && isset($json->uiData) && count($json->uiData) > 10) {
-//                        dd($json);
                         foreach ($json->uiData as $data) {
-//                            dd($data);
                             $videoId      = $data->data[0]->id; // 视频id
                             $title        = $data->data[0]->title;
                             $play_count   = $data->data[0]->playCount;
@@ -75,26 +73,24 @@ class QQVideoSpider extends Command
                             if (!$video = Video::where('original_url', $original_url)->first()) {
                                 $video = new Video();
                             }
-//                            dd($thumb, $play_count, $title, $videoId);
+
                             if ($thumb && $title && $videoId) {
                                 // 第二步：拿到视频id，获取视频信息
                                 $infoUrl      = "https://h5vv.video.qq.com/getinfo?callback=txplayerJsonpCallBack_getinfo_934380&&charge=0&defaultfmt=auto&otype=json&guid=a96d6368975b40fd9fc8a7eb5d3a45e4&flowid=e8af7e3800936921036d09289f74f5ae_11001&platform=11001&sdtfrom=v3010&defnpayver=0&appVer=3.4.40&host=m.v.qq.com&ehost=https%3A%2F%2Fm.v.qq.com%2Fx%2Fchannel%2Fvideo%2Frecreation&refer=m.v.qq.com&sphttps=1&sphls=&_rnd=" . $timestamp . "&spwm=4&vid=" . $videoId . "&defn=auto&fhdswitch=&show1080p=false&dtype=1&clip=4&defnsrc=&fmt=auto&defsrc=1&_qv_rmt=C103p%2BIKA16110pdw%3D&_qv_rmt2=jw5bfArY152401F2g%3D&_1562141001953=";
                                 $infoResponse = $client->request('GET', $infoUrl);
                                 $infoContent  = $infoResponse->getBody()->getContents();
                                 $infoJson     = $this->jsonpDecode($infoContent, false);
-//                                dd($infoJson->vl);
+
                                 // 第三步：拿到视频地址，写入数据库
                                 if (isset($infoJson) && isset($infoJson->vl) && isset($infoJson->vl->vi) && count($infoJson->vl->vi) > 0) {
                                     $videoInfo      = $infoJson->vl->vi[0];
                                     $videoExtension = $videoInfo->fn;
                                     $videoKey       = $videoInfo->fvkey;
-//                                    dd($videoInfo->ul->ui[0]->url);
-                                    $baseUrl = $videoInfo->ul->ui[0]->url;
-                                    $time    = Carbon::now()->toDateTimeString();
+                                    $baseUrl        = $videoInfo->ul->ui[0]->url;
+                                    $time           = Carbon::now()->toDateTimeString();
 
                                     if ($videoExtension && $videoKey) {
-                                        $url = $baseUrl . $videoExtension . '?vkey=' . $videoKey;
-//                                        dd($url);
+                                        $url                 = $baseUrl . $videoExtension . '?vkey=' . $videoKey;
                                         $video->url          = $url;
                                         $video->title        = $title;
                                         $video->play_count   = $play_count;
@@ -109,7 +105,6 @@ class QQVideoSpider extends Command
                                         $video->created_at   = $time;
                                         $video->updated_at   = $time;
                                         $video->save();
-//                                        dd($video);
                                     } else {
                                         myLog('qq_video', ['data' => '【' . $category->id . $category->name . '】找不到url地址']);
 
@@ -147,6 +142,8 @@ class QQVideoSpider extends Command
     }
 
     /**
+     * jsonp 转 json
+     *
      * @param $jsonp
      * @param bool $assoc
      * @return mixed
