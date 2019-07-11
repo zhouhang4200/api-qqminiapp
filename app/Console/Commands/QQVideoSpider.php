@@ -46,15 +46,15 @@ class QQVideoSpider extends Command
         foreach ($categories as $category) {
             $count = Video::where('category_id', $category->id)->where('date', $date)->count();
 
-            $latestVideo = Video::where('category_id', $category->id)
-                ->where('date', $date)
-                ->oldest('updated_at')
-                ->first();
+//            $latestVideo = Video::where('category_id', $category->id)
+//                ->where('date', $date)
+//                ->oldest('updated_at')
+//                ->first();
 
-            $oldestTimestamp = Carbon::parse($latestVideo->updated_at)->addHours(4)->timestamp;
-            $nowTimestamp = Carbon::now()->timestamp;
+//            $oldestTimestamp = Carbon::parse($latestVideo->updated_at)->addHours(4)->timestamp;
+//            $nowTimestamp = Carbon::now()->timestamp;
 
-            if ($oldestTimestamp > $nowTimestamp && $count > 300) {
+            if ($count > 300) {
                 continue;
             }
 

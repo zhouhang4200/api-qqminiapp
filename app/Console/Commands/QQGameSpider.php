@@ -53,16 +53,16 @@ class QQGameSpider extends Command
             ->where('date', $date)
             ->count();
 
-        $latestVideo = Video::where('category_id', $category_id)
-            ->where('date', $date)
-            ->oldest('updated_at')
-            ->first();
+//        $latestVideo = Video::where('category_id', $category_id)
+//            ->where('date', $date)
+//            ->oldest('updated_at')
+//            ->first();
 
-        $oldestTimestamp = Carbon::parse($latestVideo->updated_at)->addHours(4)->timestamp;
-        $nowTimestamp = Carbon::now()->timestamp;
+//        $oldestTimestamp = Carbon::parse($latestVideo->updated_at)->addHours(4)->timestamp;
+//        $nowTimestamp = Carbon::now()->timestamp;
 
 
-        if ($oldestTimestamp > $nowTimestamp && $count > 500) {
+        if ($count > 500) {
             return false;
         }
 
