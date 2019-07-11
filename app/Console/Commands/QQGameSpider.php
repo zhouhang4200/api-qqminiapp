@@ -49,6 +49,37 @@ class QQGameSpider extends Command
         ];
 
         foreach ($baseUrls as $category_id => $baseUrl) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             for ($i =1; $i <= 30; $i++) {
                 try {
                     // 第五人格
