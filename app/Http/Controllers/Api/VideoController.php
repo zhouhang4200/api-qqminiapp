@@ -117,7 +117,7 @@ class VideoController extends Controller
             return response()->json([
                 'status' => 10000,
                 'info' => $e->getMessage(),
-                'data' => false
+                'data' => ''
             ]);
         } catch (\Exception $e) {
             myLog('video_detail_error', ['info' => '【'.$e->getLine().'】:'.$e->getMessage()]);
@@ -125,7 +125,7 @@ class VideoController extends Controller
             return response()->json([
                 'status' => 10000,
                 'info' => '服务器异常',
-                'data' => false
+                'data' => ''
             ]);
         }
     }
