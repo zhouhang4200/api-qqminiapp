@@ -43,8 +43,8 @@ class CategoryController extends Controller
             $categoryIds = explode(',', $request->input('category_id'));
             $token = $request->input('token');
 
-            if (!$token) {
-                return response()->json(['status' => 10000, 'data' => '', 'info' => 'token参数缺失']);
+            if (!$token || !$categoryIds) {
+                return response()->json(['status' => 10000, 'data' => '', 'info' => '参数缺失']);
             }
 
 //            $user = Auth::guard('api')->user();
@@ -70,6 +70,10 @@ class CategoryController extends Controller
     {
         try {
             $token = $request->input('token');
+
+            if (!$token) {
+                return response()->json(['status' => 10000, 'data' => '', 'info' => '参数缺失']);
+            }
             $user = User::where('token', $token)->first();
 //            $user = Auth::guard('api')->user();
 
