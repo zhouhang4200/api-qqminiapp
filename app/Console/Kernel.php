@@ -32,6 +32,7 @@ class Kernel extends ConsoleKernel
 //        'App\Console\Commands\LolFinalSpider', // 英雄联盟
 //        'App\Console\Commands\HpjyFinalSpider', // 和平精英
         'App\Console\Commands\QQVideoSpider', // 腾讯视频爬虫
+        'App\Console\Commands\QQGameSpider', // 腾讯视频爬虫
 //        'App\Console\Commands\FunUrlSpider',
 //        'App\Console\Commands\EntUrlSpider',
 //        'App\Console\Commands\GameSpider', // 游戏
@@ -67,6 +68,7 @@ class Kernel extends ConsoleKernel
 //        $schedule->command('hpjy:spider')->everyTenMinutes();
 //        $schedule->command('hpjy_final:spider')->everyTenMinutes();
         $schedule->command('qq:video')->hourly();
+        $schedule->command('qq:game')->twiceDaily(0, 1);
     }
 
     /**
