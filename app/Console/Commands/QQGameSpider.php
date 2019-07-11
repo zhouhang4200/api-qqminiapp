@@ -113,14 +113,17 @@ class QQGameSpider extends Command
                             $video->updated_at   = $time;
                             $video->save();
                         } else {
-                            myLog('qq_game', ['data' => '【' . $category_id . '】找不到播放地址']);
+                            myLog('qq_game_error', ['data' => '【' . $category_id . '】找不到播放地址']);
                         }
                         sleep(1);
                     }
                 } catch (\Exception $e) {
+                    myLog('qq_game_error', ['data' => $e->getLine().'行:'.$e->getMessage()]);
                     continue;
                 }
             }
+        } else {
+            myLog('qq_game_error', ['data' => '图片和视频id没找到']);
         }
 
         // 两个类目的列表页的正则不一样
@@ -138,6 +141,8 @@ class QQGameSpider extends Command
             $pageContext    = $matches[1][0];
             $refreshContext = $matches[2][0];
             $this->getList($category_id, $pageContext, $refreshContext, $date);
+        } else {
+            myLog('qq_game_error', ['data' => '刷新列表的参数未找到']);
         }
 
         return true;
