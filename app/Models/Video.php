@@ -33,7 +33,7 @@ class Video extends Model
                 $date = Carbon::now()->toDateString();
                 $count = Video::where('category_id', 4)->where('date', $date)->count();
 
-                if ($count < 100) {
+                if ($count < 400) {
                     $categoryIds = Category::find(1)->children()->pluck('id')->merge(4);
                     $query->whereIn('category_id', $categoryIds)->latest('play_count');
                 } else {
@@ -43,7 +43,7 @@ class Video extends Model
                 $date = Carbon::now()->toDateString();
                 $count = Video::where('category_id', 1)->where('date', $date)->count();
 
-                if ($count < 100) {
+                if ($count < 400) {
                     $categoryIds = Category::find(1)->children()->pluck('id');
                     $query->whereIn('category_id', $categoryIds)->latest('play_count');
                 } else {

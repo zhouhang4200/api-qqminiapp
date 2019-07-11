@@ -51,11 +51,12 @@ class QQVideoSpider extends Command
             }
 
             for ($i = 1; $i < 20; $i++) {
-                $timestamp = Carbon::now()->timestamp;
-                $page      = 15 * $i;
+                $timestamp   = Carbon::now()->timestamp;
+                $rand_number = mt_rand(100, 999);
+                $page        = 15 * $i;
                 try {
                     // 第一步：获取视频id
-                    $searchUrl = "https://node.video.qq.com/x/api/msearch?contextValue=last_end%3D" . $page . "%26sort%3D1%26%26response%3D1&filterValue=pubfilter%3D4&searchSession=qid%3DpK7qYBiMDvhLjL1kGhWIPdbyVshRXm_pptL9YqboWWlIososhSJj1A&keyWord=" . $category->name . "&contextType=3&_=" . $timestamp . "724&callback=jsonp3";
+                    $searchUrl = "https://node.video.qq.com/x/api/msearch?contextValue=last_end%3D" . $page . "%26sort%3D1%26%26response%3D1&filterValue=pubfilter%3D4&searchSession=qid%3DpK7qYBiMDvhLjL1kGhWIPdbyVshRXm_pptL9YqboWWlIososhSJj1A&keyWord=" . $category->name . "&contextType=3&_=" . $timestamp . $rand_number . "&callback=jsonp3";
                     $client    = new Client();
                     $response  = $client->request('GET', $searchUrl);
                     $content   = $response->getBody()->getContents();
