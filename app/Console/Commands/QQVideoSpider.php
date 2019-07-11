@@ -108,7 +108,7 @@ class QQVideoSpider extends Command
                                         $video->created_at   = $time;
                                         $video->updated_at   = $time;
                                         $video->save();
-                                        dd($video);
+//                                        dd($video);
                                     } else {
                                         myLog('qq_video', ['data' => '【' . $category->id . $category->name . '】找不到url地址']);
 
