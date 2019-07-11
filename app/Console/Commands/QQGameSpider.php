@@ -137,7 +137,7 @@ class QQGameSpider extends Command
         } else {
             $matches = [];
         }
-        dd($infoContent, $matches);
+
         if ($matches && count($matches) > 0 && count($matches[1]) > 0) {
             $pageContext    = $matches[1][0];
             $refreshContext = $matches[2][0];
