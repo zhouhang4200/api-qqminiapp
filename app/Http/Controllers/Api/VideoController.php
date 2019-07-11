@@ -62,7 +62,7 @@ class VideoController extends Controller
 
             $videos = Video::filter($filters)
                 ->with('category')
-                ->where('id', '>', $video_id)
+                ->where('videos.id', '>', $video_id)
                 ->oldest('id')
                 ->take(15)
                 ->get();
