@@ -21,7 +21,8 @@ use Illuminate\Http\Request;
 Route::prefix('video')->group(function () {
     Route::get('/', 'VideoController@index'); // 视频
     Route::get('search', 'VideoController@search'); // 查找
-    Route::get('recommend', 'VideoController@recommend'); // 查找
+    Route::get('recommend', 'VideoController@recommend'); // 相关
+    Route::get('detail', 'VideoController@detail'); // 详情
 });
 
 Route::prefix('category')->group(function () {

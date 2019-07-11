@@ -191,3 +191,46 @@
     ]
 }
 ```
+
+### 视频详情
+
+#### 请求
+
+`GET` /video/detail
+
+#### 请求参数
+
+| 参数名      | 说明 |
+| -------- | -----:  |
+| video_id | 必传 |
+
+#### 响应
+```
+{
+    "status": 0,
+    "info": "获取成功",
+    "data": {
+        "id": 1,
+        "date": "2019-07-11",
+        "status": 1,
+        "category_id": 1,
+        "title": "迷你世界：小姨子发现我再着藏着睡觉了，气的竟然用用臭臭包围我",
+        "thumb": "http://puui.qpic.cn/vpic/0/x0879iopzb8.png/0",
+        "original_url": "",
+        "url": "https://ugcws.video.gtimg.com/uwMROfz2r5zEIaQXGdGnC2dfDmafRkP9ujxgqKjuATzMrE-2/x0879iopzb8.mp4?vkey=59811E693E4380D61A6A825BF7B10083EFC32323700463C1A177C09BC1C844AC15D09A1D95041170B1F6CF80A5889433A8FF6773E2CB9DA4F7E14B199CAE0D6ABDE0A854C97A4B71D4B8CB55558038B56EDB64A05F11DFFAAB7E23FBD4B7F40714DB8C746D342B75132AA08617644BBE872C9F9DB8691144D103D0E6068F7C4A",
+        "play_count": "0",
+        "play_time": "68",
+        "source_id": 1,
+        "source_name": "腾讯视频",
+        "created_at": "2019-07-11 16:51:11",
+        "updated_at": "2019-07-11 16:51:11",
+        "category": {
+            "id": 1,
+            "pid": 0,
+            "name": "游戏",
+            "created_at": null,
+            "updated_at": null
+        }
+    }
+}
+```

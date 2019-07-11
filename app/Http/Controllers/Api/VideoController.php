@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\QqException;
 use App\Models\UserCategory;
 use App\Models\Video;
 use Illuminate\Http\Request;
@@ -53,11 +54,7 @@ class VideoController extends Controller
             $filters = compact('token');
 
             if (!$video_id) {
-                return response()->json([
-                    'status' => 10000,
-                    'info' => '参数不可为空',
-                    'data' => false
-                ]);
+                throw new QqException('必选参数不可为空');
             }
 
             $videos = Video::filter([])
@@ -72,8 +69,58 @@ class VideoController extends Controller
                 'info' => '获取成功',
                 'data' => $videos
             ]);
+        } catch (QqException $e) {
+            myLog('video_recommend_error', ['info' => '【'.$e->getLine().'】:'.$e->getMessage()]);
+
+            return response()->json([
+                'status' => 10000,
+                'info' => $e->getMessage(),
+                'data' => false
+            ]);
         } catch (\Exception $e) {
-            myLog('video_error', ['info' => '【'.$e->getLine().'】:'.$e->getMessage()]);
+            myLog('video_recommend_error', ['info' => '【'.$e->getLine().'】:'.$e->getMessage()]);
+
+            return response()->json([
+                'status' => 10000,
+                'info' => '服务器异常',
+                'data' => false
+            ]);
+        }
+    }
+
+    /**
+     * 视频详情
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function detail(Request $request)
+    {
+        try {
+            $id = $request->input('video_id');
+
+            if (!$id) {
+                throw new QqException('参数video_id不可为空');
+            }
+
+            $video = Video::with('category')
+                ->find($id);
+
+            return response()->json([
+                'status' => 0,
+                'info' => '获取成功',
+                'data' => $video
+            ]);
+        } catch (QqException $e) {
+            myLog('video_detail_error', ['info' => '【'.$e->getLine().'】:'.$e->getMessage()]);
+
+            return response()->json([
+                'status' => 10000,
+                'info' => $e->getMessage(),
+                'data' => false
+            ]);
+        } catch (\Exception $e) {
+            myLog('video_detail_error', ['info' => '【'.$e->getLine().'】:'.$e->getMessage()]);
 
             return response()->json([
                 'status' => 10000,

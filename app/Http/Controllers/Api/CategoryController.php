@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\QqException;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -40,12 +41,13 @@ class CategoryController extends Controller
     public function subscribe(Request $request)
     {
         try {
-            $categoryIds = explode(',', $request->input('category_id'));
+            $category_id = $request->input('category_id');
             $token = $request->input('token');
 
-            if (!$token || !$categoryIds) {
-                return response()->json(['status' => 10000, 'data' => '', 'info' => '参数缺失']);
+            if (!$token || !$category_id) {
+                throw new QqException('必选参数不可为空');
             }
+            $categoryIds = explode(',', $category_id);
 
 //            $user = Auth::guard('api')->user();
             $user = User::where('token', $token)->first();
@@ -53,8 +55,16 @@ class CategoryController extends Controller
             $data = $user->categories()->sync($categoryIds);
 
             return response()->json(['status' => 0, 'data' => '', 'info' => '订阅成功']);
+        } catch (QqException $e) {
+            myLog('category_subscribe_error', ['info' => '【'.$e->getLine().'】:'.$e->getMessage()]);
+
+            return response()->json([
+                'status' => 10000,
+                'data' => false,
+                'info' => $e->getMessage(),
+            ]);
         } catch (\Exception $e) {
-            myLog('category_error', ['data' => $e->getMessage()]);
+            myLog('category_subscribe_error', ['data' => $e->getMessage()]);
 
             return response()->json(['status' => 10000, 'data' => '', 'info' => '服务器异常']);
         }
@@ -72,7 +82,7 @@ class CategoryController extends Controller
             $token = $request->input('token');
 
             if (!$token) {
-                return response()->json(['status' => 10000, 'data' => '', 'info' => '参数缺失']);
+                throw new QqException('必选参数不可为空');
             }
             $user = User::where('token', $token)->first();
 //            $user = Auth::guard('api')->user();
@@ -80,8 +90,16 @@ class CategoryController extends Controller
             $data = $user->load('categories');
 
             return response()->json(['status' => 0, 'data' => $data, 'info' => 'success']);
+        } catch (QqException $e) {
+            myLog('category_user_error', ['info' => '【'.$e->getLine().'】:'.$e->getMessage()]);
+
+            return response()->json([
+                'status' => 10000,
+                'data' => false,
+                'info' => $e->getMessage(),
+            ]);
         } catch (\Exception $e) {
-            myLog('category_error', ['data' => $e->getMessage()]);
+            myLog('category_user_error', ['data' => $e->getMessage()]);
 
             return response()->json(['status' => 10000, 'data' => '', 'info' => '服务器异常']);
         }
