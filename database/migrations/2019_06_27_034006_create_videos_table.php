@@ -25,6 +25,7 @@ class CreateVideosTable extends Migration
             $table->string('play_count')->comment('播放量');
             $table->string('play_time')->comment('播放时长');
             $table->tinyInteger('source_id')->default(0)->comment('来源');
+            $table->string('source_name')->default('')->comment('来源名');
             $table->timestamps();
         });
     }
