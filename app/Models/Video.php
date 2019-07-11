@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,8 +30,25 @@ class Video extends Model
     {
         if (isset($filters['category_id'])) {
             if ($filters['category_id'] == 4) { // 动漫取所有
-                $categoryIds = Category::find(4)->children()->pluck('id')->merge(4);
-                $query->whereIn('category_id', $categoryIds);
+                $date = Carbon::now()->toDateString();
+                $count = Video::where('category_id', 4)->where('date', $date)->count();
+
+                if ($count < 100) {
+                    $categoryIds = Category::find(1)->children()->pluck('id')->merge(4);
+                    $query->whereIn('category_id', $categoryIds)->latest('play_count');
+                } else {
+                    $query->where('category_id', $filters['category_id']);
+                }
+            } elseif($filters['category_id'] == 1) { // 游戏，游戏接口不稳定，取不到的时候，取子分类游戏
+                $date = Carbon::now()->toDateString();
+                $count = Video::where('category_id', 1)->where('date', $date)->count();
+
+                if ($count < 100) {
+                    $categoryIds = Category::find(1)->children()->pluck('id');
+                    $query->whereIn('category_id', $categoryIds)->latest('play_count');
+                } else {
+                    $query->where('category_id', $filters['category_id']);
+                }
             } else {
                 $query->where('category_id', $filters['category_id']);
             }
