@@ -26,15 +26,15 @@ Route::prefix('video')->group(function () {
 
 Route::prefix('category')->group(function () {
     Route::get('/', 'CategoryController@index'); // 分类
-//    Route::post('subscribe', 'CategoryController@subscribe'); // 订阅
-//    Route::get('user', 'CategoryController@user'); // 订阅的数据
+    Route::post('subscribe', 'CategoryController@subscribe'); // 订阅
+    Route::get('user', 'CategoryController@user'); // 订阅的数据
 });
 
 Route::post('code', 'LoginController@code');
 
-Route::middleware('api.token')->group(function () {
-    Route::prefix('category')->group(function () {
-        Route::post('subscribe', 'CategoryController@subscribe'); // 订阅
-        Route::get('user', 'CategoryController@user'); // 订阅的数据
-    });
-});
+//Route::middleware('api.token')->group(function () {
+//    Route::prefix('category')->group(function () {
+//        Route::post('subscribe', 'CategoryController@subscribe'); // 订阅
+//        Route::get('user', 'CategoryController@user'); // 订阅的数据
+//    });
+//});
