@@ -52,10 +52,10 @@ class QQVideoSpider extends Command
 
             for ($i = 1; $i < 20; $i++) {
                 $timestamp = Carbon::now()->timestamp;
-                $page = 15 * $i;
+                $page      = 15 * $i;
                 try {
                     // 第一步：获取视频id
-                    $searchUrl = "https://node.video.qq.com/x/api/msearch?contextValue=last_end%3D" . $page . "%26sort%3D1%26%26response%3D1&filterValue=pubfilter%3D4&searchSession=qid%3DpK7qYBiMDvhLjL1kGhWIPdbyVshRXm_pptL9YqboWWlIososhSJj1A&keyWord=" . $category->name . "&contextType=3&_=".$timestamp."724&callback=jsonp3";
+                    $searchUrl = "https://node.video.qq.com/x/api/msearch?contextValue=last_end%3D" . $page . "%26sort%3D1%26%26response%3D1&filterValue=pubfilter%3D4&searchSession=qid%3DpK7qYBiMDvhLjL1kGhWIPdbyVshRXm_pptL9YqboWWlIososhSJj1A&keyWord=" . $category->name . "&contextType=3&_=" . $timestamp . "724&callback=jsonp3";
                     $client    = new Client();
                     $response  = $client->request('GET', $searchUrl);
                     $content   = $response->getBody()->getContents();
@@ -104,6 +104,7 @@ class QQVideoSpider extends Command
                                         $video->original_url = $original_url;
                                         $video->play_time    = $play_time;
                                         $video->source_id    = 1; // 腾讯
+                                        $video->source_name  = '腾讯视频'; // 腾讯
                                         $video->status       = 1;
                                         $video->created_at   = $time;
                                         $video->updated_at   = $time;

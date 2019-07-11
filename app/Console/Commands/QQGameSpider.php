@@ -90,15 +90,15 @@ class QQGameSpider extends Command
                         $videoInfo      = $infoJson->vl->vi[0];
                         $videoExtension = $videoInfo->fn;
                         $videoKey       = $videoInfo->fvkey;
-                        $baseUrl      = $videoInfo->ul->ui[0]->url;
-                        $time         = Carbon::now()->toDateTimeString();
-                        $title        = $videoInfo->ti;
-                        $play_count   = '0';
-                        $original_url = '';
-                        $play_time    = $infoJson->preview;
+                        $baseUrl        = $videoInfo->ul->ui[0]->url;
+                        $time           = Carbon::now()->toDateTimeString();
+                        $title          = $videoInfo->ti;
+                        $play_count     = '0';
+                        $original_url   = '';
+                        $play_time      = $infoJson->preview;
 
                         if ($videoExtension && $videoKey) {
-                            $url = $baseUrl . $videoExtension . '?vkey=' . $videoKey;
+                            $url                 = $baseUrl . $videoExtension . '?vkey=' . $videoKey;
                             $video->url          = $url;
                             $video->title        = $title;
                             $video->play_count   = $play_count;
@@ -108,6 +108,7 @@ class QQGameSpider extends Command
                             $video->original_url = $original_url;
                             $video->play_time    = $play_time;
                             $video->source_id    = 1; // 腾讯
+                            $video->source_name  = '腾讯视频'; // 腾讯
                             $video->status       = 1;
                             $video->created_at   = $time;
                             $video->updated_at   = $time;
@@ -118,7 +119,7 @@ class QQGameSpider extends Command
                         sleep(1);
                     }
                 } catch (\Exception $e) {
-                    myLog('qq_game_error', ['data' => $e->getLine().'行:'.$e->getMessage()]);
+                    myLog('qq_game_error', ['data' => $e->getLine() . '行:' . $e->getMessage()]);
                     continue;
                 }
             }
@@ -211,7 +212,7 @@ class QQGameSpider extends Command
                     }
                 }
             } catch (\Exception $e) {
-                myLog('qq_game_error', ['data' => $e->getLine() .'行：'. $e->getMessage()]);
+                myLog('qq_game_error', ['data' => $e->getLine() . '行：' . $e->getMessage()]);
                 continue;
             }
 

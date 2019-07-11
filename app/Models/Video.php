@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Auth;
 class Video extends Model
 {
     protected $fillable = [
-        'category_id', 'title', 'thumb', 'url', 'original_url', 'date', 'status', 'play_count', 'play_time', 'source_id'
+        'category_id', 'title', 'thumb', 'url', 'original_url',
+        'date', 'status', 'play_count', 'play_time', 'source_id',
+        'source_name'
     ];
 
     public function category()
