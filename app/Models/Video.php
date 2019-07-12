@@ -34,7 +34,7 @@ class Video extends Model
                 $count = Video::where('category_id', 4)->where('date', $date)->count();
 
                 if ($count < 400) {
-                    $categoryIds = Category::find(1)->children()->pluck('id')->merge(4);
+                    $categoryIds = Category::find(4)->children()->pluck('id')->merge(4);
                     $query->whereIn('category_id', $categoryIds)->latest('play_count');
                 } else {
                     $query->where('category_id', $filters['category_id']);
@@ -45,6 +45,19 @@ class Video extends Model
 
                 if ($count < 400) {
                     $categoryIds = Category::find(1)->children()->pluck('id');
+                    $query->whereIn('category_id', $categoryIds)->latest('play_count');
+                } else {
+                    $query->where('category_id', $filters['category_id']);
+                }
+            } elseif($filters['category_id'] == 2) { // 娱乐
+                $date = Carbon::now()->toDateString();
+                $count = Video::where('category_id', 2)->where('date', $date)->count();
+
+                if ($count < 100) {
+                    $categoryIds = Category::find(2)->children()->pluck('id')->merge(2);
+                    $query->whereIn('category_id', $categoryIds);
+                } elseif ($count < 400) {
+                    $categoryIds = Category::find(2)->children()->pluck('id')->merge(2);
                     $query->whereIn('category_id', $categoryIds)->latest('play_count');
                 } else {
                     $query->where('category_id', $filters['category_id']);
