@@ -28,11 +28,15 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('qq:video')->daily();
-        $schedule->command('qq:video')->dailyAt('04:00');
-        $schedule->command('qq:video')->dailyAt('07:00');
-        $schedule->command('qq:video')->dailyAt('19:15');
-        $schedule->command('qq:video')->dailyAt('19:17');
-        $schedule->command('qq:video')->dailyAt('21:30');
+        $schedule->command('qq:video')->dailyAt('02:00');
+        $schedule->command('qq:video')->dailyAt('03:00');
+        $schedule->command('qq:video')->dailyAt('05:00');
+        $schedule->command('qq:video')->dailyAt('08:00');
+        $schedule->command('qq:video')->dailyAt('11:00');
+        $schedule->command('qq:video')->dailyAt('14:30');
+        $schedule->command('qq:video')->dailyAt('17:00');
+        $schedule->command('qq:video')->dailyAt('20:00');
+        $schedule->command('qq:video')->dailyAt('22:00');
         $schedule->command('qq:game')->everyThirtyMinutes();
 //        $schedule->command('qq:delete')->everyThirtyMinutes();
     }
