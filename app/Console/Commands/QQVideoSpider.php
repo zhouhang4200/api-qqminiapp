@@ -123,10 +123,8 @@ class QQVideoSpider extends Command
                                         }
                                     }
                                 }
-                                sleep(1);
                             } catch (\Exception $e) {
                                 myLog('qq_video_error', ['data' => $category->name . '【' . $e->getLine() . '】' . $e->getMessage()]);
-                                sleep(1);
                                 continue;
                             }
                         }
@@ -137,7 +135,6 @@ class QQVideoSpider extends Command
                     }
                 } catch (\Exception $e) {
                     myLog('qq_video_error', ['data' => $category->name . '【' . $e->getLine() . '】' . $e->getMessage()]);
-                    sleep(1);
                     continue;
                 }
             }
