@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         'App\Console\Commands\QQVideoSpider', // 爬取二级分类视频地址
         'App\Console\Commands\QQGameSpider', // 爬取游戏和娱乐的一级分类视频地址
-        'App\Console\Commands\DeleteVideoOverDate', // 删除4小时前视频
+        'App\Console\Commands\DeleteVideoOverDate', // 删除5小时前视频
     ];
 
     /**
