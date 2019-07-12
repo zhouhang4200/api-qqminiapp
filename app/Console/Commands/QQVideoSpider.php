@@ -7,6 +7,7 @@ use App\Models\Video;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class QQVideoSpider extends Command
 {
@@ -71,6 +72,7 @@ class QQVideoSpider extends Command
                     $json      = $this->jsonpDecode($content);
 
                     if ($json->errCode == 0 && isset($json->uiData) && count($json->uiData) > 10) {
+                        $insertData = [];
                         foreach ($json->uiData as $data) {
                             $videoId      = $data->data[0]->id; // 视频id
                             $title        = $data->data[0]->title;
@@ -79,8 +81,10 @@ class QQVideoSpider extends Command
                             $original_url = $data->data[0]->webPlayUrl;
                             $play_time    = $data->data[0]->duration;
                             // 去重
-                            if (!$video = Video::where('original_url', $original_url)->first()) {
-                                $video = new Video();
+                            $video = Video::where('original_url', $original_url)->first();
+
+                            if ($video) {
+                                continue;
                             }
 
                             if ($thumb && $title && $videoId) {
@@ -99,38 +103,30 @@ class QQVideoSpider extends Command
                                     $time           = Carbon::now()->toDateTimeString();
 
                                     if ($videoExtension && $videoKey) {
-                                        $url                 = $baseUrl . $videoExtension . '?vkey=' . $videoKey;
-                                        $video->url          = $url;
-                                        $video->title        = $title;
-                                        $video->play_count   = $play_count;
-                                        $video->thumb        = $thumb;
-                                        $video->date         = $date;
-                                        $video->category_id  = $category->id;
-                                        $video->original_url = $original_url;
-                                        $video->play_time    = $play_time;
-                                        $video->source_id    = 1; // 腾讯
-                                        $video->source_name  = '腾讯视频'; // 腾讯
-                                        $video->status       = 1;
-                                        $video->created_at   = $time;
-                                        $video->updated_at   = $time;
-                                        $video->save();
-                                    } else {
-                                        myLog('qq_video', ['data' => '【' . $category->id . $category->name . '】找不到url地址']);
-
-                                        sleep(1);
-
-                                        continue;
+                                        $url          = $baseUrl . $videoExtension . '?vkey=' . $videoKey;
+                                        $insertData[] = [
+                                            'url'          => $url,
+                                            'title'        => $title,
+                                            'play_count'   => $play_count,
+                                            'thumb'        => $thumb,
+                                            'date'         => $date,
+                                            'category_id'  => $category->id,
+                                            'original_url' => $original_url,
+                                            'play_time'    => $play_time,
+                                            'source_id'    => 1, // 腾讯
+                                            'source_name'  => '腾讯视频', // 腾讯
+                                            'status'       => 1,
+                                            'created_at'   => $time,
+                                            'updated_at'   => $time,
+                                        ];
                                     }
                                 }
-                            } else {
-                                myLog('qq_video', ['data' => '【' . $category->id . $category->name . '】找不到视频id']);
-
-                                sleep(1);
-
-                                continue;
                             }
-
                             sleep(2);
+                        }
+                        // 写入数据库
+                        if ($insertData && count($insertData) > 0) {
+                            DB::table('videos')->insert($insertData);
                         }
                     } else {
                         myLog('qq_video', ['data' => '【' . $category->id . $category->name . '】获取列表失败']);

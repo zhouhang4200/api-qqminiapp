@@ -8,6 +8,7 @@ use DiDom\Document;
 use GuzzleHttp\Client;
 use Httpful\Request;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Nesk\Puphpeteer\Puppeteer;
 
 class QQGameSpider extends Command
@@ -84,16 +85,17 @@ class QQGameSpider extends Command
         preg_match_all('~data-vid=\\\"(.*?)\\\"\>~', $infoContent, $video_ids);
 
         if ($thumbs && count($thumbs) > 0) {
+            $insertData = [];
             foreach ($thumbs[1] as $k => $thumb) {
                 $timestamp = Carbon::now()->timestamp;
                 $video_id  = $video_ids[1][$k];
                 try {
                     $video = Video::where('thumb', $thumb)->first();
 
-                    if (!$video) {
-                        $video         = new Video();
+                    if ($video) {
+                        continue;
                     }
-                    $infoUrl       = "https://h5vv.video.qq.com/getinfo?callback=txplayerJsonpCallBack_getinfo_934380&&charge=0&defaultfmt=auto&otype=json&guid=a96d6368975b40fd9fc8a7eb5d3a45e4&flowid=e8af7e3800936921036d09289f74f5ae_11001&platform=11001&sdtfrom=v3010&defnpayver=0&appVer=3.4.40&host=m.v.qq.com&ehost=https%3A%2F%2Fm.v.qq.com%2Fx%2Fchannel%2Fvideo%2Frecreation&refer=m.v.qq.com&sphttps=1&sphls=&_rnd=" . $timestamp . "&spwm=4&vid=" . $video_id . "&defn=auto&fhdswitch=&show1080p=false&dtype=1&clip=4&defnsrc=&fmt=auto&defsrc=1&_qv_rmt=C103p%2BIKA16110pdw%3D&_qv_rmt2=jw5bfArY152401F2g%3D&_".$timestamp."111=";
+                    $infoUrl       = "https://h5vv.video.qq.com/getinfo?callback=txplayerJsonpCallBack_getinfo_934380&&charge=0&defaultfmt=auto&otype=json&guid=a96d6368975b40fd9fc8a7eb5d3a45e4&flowid=e8af7e3800936921036d09289f74f5ae_11001&platform=11001&sdtfrom=v3010&defnpayver=0&appVer=3.4.40&host=m.v.qq.com&ehost=https%3A%2F%2Fm.v.qq.com%2Fx%2Fchannel%2Fvideo%2Frecreation&refer=m.v.qq.com&sphttps=1&sphls=&_rnd=" . $timestamp . "&spwm=4&vid=" . $video_id . "&defn=auto&fhdswitch=&show1080p=false&dtype=1&clip=4&defnsrc=&fmt=auto&defsrc=1&_qv_rmt=C103p%2BIKA16110pdw%3D&_qv_rmt2=jw5bfArY152401F2g%3D&_" . $timestamp . "111=";
                     $client        = new Client();
                     $infoResponse  = $client->request('GET', $infoUrl);
                     $detailContent = $infoResponse->getBody()->getContents();
@@ -111,23 +113,22 @@ class QQGameSpider extends Command
                         $play_time      = $infoJson->preview;
 
                         if ($videoExtension && $videoKey) {
-                            $url                 = $baseUrl . $videoExtension . '?vkey=' . $videoKey;
-                            $video->url          = $url;
-                            $video->title        = $title;
-                            $video->play_count   = $play_count;
-                            $video->thumb        = $thumb;
-                            $video->date         = $date;
-                            $video->category_id  = $category_id;
-                            $video->original_url = $original_url;
-                            $video->play_time    = $play_time;
-                            $video->source_id    = 1; // 腾讯
-                            $video->source_name  = '腾讯视频'; // 腾讯
-                            $video->status       = 1;
-                            $video->created_at   = $time;
-                            $video->updated_at   = $time;
-                            $video->save();
-                        } else {
-                            myLog('qq_game_error', ['data' => '【' . $category_id . '】找不到播放地址']);
+                            $url          = $baseUrl . $videoExtension . '?vkey=' . $videoKey;
+                            $insertData[] = [
+                                'url'          => $url,
+                                'title'        => $title,
+                                'play_count'   => $play_count,
+                                'thumb'        => $thumb,
+                                'date'         => $date,
+                                'category_id'  => $category_id,
+                                'original_url' => $original_url,
+                                'play_time'    => $play_time,
+                                'source_id'    => 1, // 腾讯
+                                'source_name'  => '腾讯视频', // 腾讯
+                                'status'       => 1,
+                                'created_at'   => $time,
+                                'updated_at'   => $time,
+                            ];
                         }
                         sleep(1);
                     }
@@ -136,8 +137,12 @@ class QQGameSpider extends Command
                     continue;
                 }
             }
+
+            if ($insertData && count($insertData) > 0) {
+                DB::table('videos')->insert($insertData);
+            }
         } else {
-            myLog('qq_game_error', ['data' => $category_id.'图片和视频id没找到']);
+            myLog('qq_game_error', ['data' => $category_id . '图片和视频id没找到']);
         }
 
         // 两个类目的列表页的正则不一样
@@ -157,7 +162,7 @@ class QQGameSpider extends Command
             $refreshContext = $matches[2][0];
             $this->getList($category_id, $pageContext, $refreshContext, $date);
         } else {
-            myLog('qq_game_error', ['data' => $category_id.'刷新列表的参数未找到']);
+            myLog('qq_game_error', ['data' => $category_id . '刷新列表的参数未找到']);
         }
 
         return true;
@@ -205,7 +210,7 @@ class QQGameSpider extends Command
                     ->send();
 
                 if ($response->code != 200) {
-                    myLog('qq_game_error', ['data' => $category_id.'请求的页面返回码不是200']);
+                    myLog('qq_game_error', ['data' => $category_id . '请求的页面返回码不是200']);
                 }
 
                 $html = $response->body;

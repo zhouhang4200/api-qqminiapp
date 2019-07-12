@@ -11,7 +11,7 @@ class Video extends Model
     protected $fillable = [
         'category_id', 'title', 'thumb', 'url', 'original_url',
         'date', 'status', 'play_count', 'play_time', 'source_id',
-        'source_name'
+        'source_name', 'created_at', 'updated_at'
     ];
 
     public function category()
