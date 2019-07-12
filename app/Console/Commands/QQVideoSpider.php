@@ -59,7 +59,7 @@ class QQVideoSpider extends Command
 //                continue;
 //            }
 
-            for ($i = 1; $i < 19; $i++) {
+            for ($i = 1; $i < 16; $i++) {
                 $timestamp   = Carbon::now()->timestamp;
                 $rand_number = mt_rand(100, 999);
                 $page        = 15 * $i;
