@@ -28,8 +28,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('qq:video')->daily();
-        $schedule->command('qq:video')->dailyAt('02:00');
-        $schedule->command('qq:video')->dailyAt('03:00');
+        $schedule->command('qq:video')->dailyAt('02:30');
+        $schedule->command('qq:video')->dailyAt('03:30');
         $schedule->command('qq:video')->dailyAt('05:00');
         $schedule->command('qq:video')->dailyAt('08:00');
         $schedule->command('qq:video')->dailyAt('11:00');
