@@ -30,7 +30,7 @@ class Video extends Model
     {
         if (isset($filters['category_id'])) {
             if ($filters['category_id'] == 4) { // 动漫取所有
-                $date = Carbon::now()->toDateString();
+                $date  = Carbon::now()->toDateString();
                 $count = Video::where('category_id', 4)->where('date', $date)->count();
 
                 if ($count < 400) {
@@ -39,8 +39,8 @@ class Video extends Model
                 } else {
                     $query->where('category_id', $filters['category_id']);
                 }
-            } elseif($filters['category_id'] == 1) { // 游戏，游戏接口不稳定，取不到的时候，取子分类游戏
-                $date = Carbon::now()->toDateString();
+            } elseif ($filters['category_id'] == 1) { // 游戏，游戏接口不稳定，取不到的时候，取子分类游戏
+                $date  = Carbon::now()->toDateString();
                 $count = Video::where('category_id', 1)->where('date', $date)->count();
 
                 if ($count < 400) {
@@ -49,8 +49,8 @@ class Video extends Model
                 } else {
                     $query->where('category_id', $filters['category_id']);
                 }
-            } elseif($filters['category_id'] == 2) { // 娱乐
-                $date = Carbon::now()->toDateString();
+            } elseif ($filters['category_id'] == 2) { // 娱乐
+                $date  = Carbon::now()->toDateString();
                 $count = Video::where('category_id', 2)->where('date', $date)->count();
 
                 if ($count < 100) {
@@ -62,13 +62,17 @@ class Video extends Model
                 } else {
                     $query->where('category_id', $filters['category_id']);
                 }
+            } elseif ($filters['category_id'] == 'gz') { // 关注
+                $query->latest('play_count');
+            } elseif ($filters['category_id'] == 'tj') { // 推荐
+                $query->latest('play_count');
             } else {
                 $query->where('category_id', $filters['category_id']);
             }
         }
 
         if (isset($filters['title'])) {
-            $query->where('title', 'like', '%'.$filters['title'].'%');
+            $query->where('title', 'like', '%' . $filters['title'] . '%');
         }
 
         if (isset($filters['date'])) {
@@ -76,7 +80,7 @@ class Video extends Model
         }
 
         if (isset($filters['token'])) {
-            $user = User::where('token', $filters['token'])->first();
+            $user            = User::where('token', $filters['token'])->first();
             $userCategoryIds = $user->categories()->pluck('categories.id');
             $query->whereIn('category_id', $userCategoryIds);
         }
