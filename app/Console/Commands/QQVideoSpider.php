@@ -59,7 +59,7 @@ class QQVideoSpider extends Command
 //                continue;
 //            }
 
-            for ($i = 1; $i < 20; $i++) {
+            for ($i = 1; $i < 19; $i++) {
                 $timestamp   = Carbon::now()->timestamp;
                 $rand_number = mt_rand(100, 999);
                 $page        = 15 * $i;
@@ -74,72 +74,70 @@ class QQVideoSpider extends Command
                     if ($json->errCode == 0 && isset($json->uiData) && count($json->uiData) > 10) {
                         $insertData = [];
                         foreach ($json->uiData as $data) {
-                            $videoId      = $data->data[0]->id; // 视频id
-                            $title        = $data->data[0]->title;
-                            $play_count   = $data->data[0]->playCount;
-                            $thumb        = $data->data[0]->posterPic;
-                            $original_url = $data->data[0]->webPlayUrl;
-                            $play_time    = $data->data[0]->duration;
-                            // 去重
-                            $video = Video::where('original_url', $original_url)->first();
+                            try {
+                                $videoId      = $data->data[0]->id; // 视频id
+                                $title        = $data->data[0]->title;
+                                $play_count   = $data->data[0]->playCount;
+                                $thumb        = $data->data[0]->posterPic;
+                                $original_url = $data->data[0]->webPlayUrl;
+                                $play_time    = $data->data[0]->duration;
+                                // 去重
+                                $video = Video::where('original_url', $original_url)->first();
 
-                            if ($video) {
-                                continue;
-                            }
+                                if ($video) {
+                                    continue;
+                                }
 
-                            if ($thumb && $title && $videoId) {
-                                // 第二步：拿到视频id，获取视频信息
-                                $infoUrl      = "https://h5vv.video.qq.com/getinfo?callback=txplayerJsonpCallBack_getinfo_934380&&charge=0&defaultfmt=auto&otype=json&guid=a96d6368975b40fd9fc8a7eb5d3a45e4&flowid=e8af7e3800936921036d09289f74f5ae_11001&platform=11001&sdtfrom=v3010&defnpayver=0&appVer=3.4.40&host=m.v.qq.com&ehost=https%3A%2F%2Fm.v.qq.com%2Fx%2Fchannel%2Fvideo%2Frecreation&refer=m.v.qq.com&sphttps=1&sphls=&_rnd=" . $timestamp . "&spwm=4&vid=" . $videoId . "&defn=auto&fhdswitch=&show1080p=false&dtype=1&clip=4&defnsrc=&fmt=auto&defsrc=1&_qv_rmt=C103p%2BIKA16110pdw%3D&_qv_rmt2=jw5bfArY152401F2g%3D&_1562141001953=";
-                                $infoResponse = $client->request('GET', $infoUrl);
-                                $infoContent  = $infoResponse->getBody()->getContents();
-                                $infoJson     = $this->jsonpDecode($infoContent, false);
+                                if ($thumb && $title && $videoId) {
+                                    // 第二步：拿到视频id，获取视频信息
+                                    $infoUrl      = "https://h5vv.video.qq.com/getinfo?callback=txplayerJsonpCallBack_getinfo_934380&&charge=0&defaultfmt=auto&otype=json&guid=a96d6368975b40fd9fc8a7eb5d3a45e4&flowid=e8af7e3800936921036d09289f74f5ae_11001&platform=11001&sdtfrom=v3010&defnpayver=0&appVer=3.4.40&host=m.v.qq.com&ehost=https%3A%2F%2Fm.v.qq.com%2Fx%2Fchannel%2Fvideo%2Frecreation&refer=m.v.qq.com&sphttps=1&sphls=&_rnd=" . $timestamp . "&spwm=4&vid=" . $videoId . "&defn=auto&fhdswitch=&show1080p=false&dtype=1&clip=4&defnsrc=&fmt=auto&defsrc=1&_qv_rmt=C103p%2BIKA16110pdw%3D&_qv_rmt2=jw5bfArY152401F2g%3D&_1562141001953=";
+                                    $infoResponse = $client->request('GET', $infoUrl);
+                                    $infoContent  = $infoResponse->getBody()->getContents();
+                                    $infoJson     = $this->jsonpDecode($infoContent, false);
 
-                                // 第三步：拿到视频地址，写入数据库
-                                if (isset($infoJson) && isset($infoJson->vl) && isset($infoJson->vl->vi) && count($infoJson->vl->vi) > 0) {
-                                    $videoInfo      = $infoJson->vl->vi[0];
-                                    $videoExtension = $videoInfo->fn;
-                                    $videoKey       = $videoInfo->fvkey;
-                                    $baseUrl        = $videoInfo->ul->ui[0]->url;
-                                    $time           = Carbon::now()->toDateTimeString();
+                                    // 第三步：拿到视频地址，写入数据库
+                                    if (isset($infoJson) && isset($infoJson->vl) && isset($infoJson->vl->vi) && count($infoJson->vl->vi) > 0) {
+                                        $videoInfo      = $infoJson->vl->vi[0];
+                                        $videoExtension = $videoInfo->fn;
+                                        $videoKey       = $videoInfo->fvkey;
+                                        $baseUrl        = $videoInfo->ul->ui[0]->url;
+                                        $time           = Carbon::now()->toDateTimeString();
 
-                                    if ($videoExtension && $videoKey) {
-                                        $url          = $baseUrl . $videoExtension . '?vkey=' . $videoKey;
-                                        $insertData[] = [
-                                            'url'          => $url,
-                                            'title'        => $title,
-                                            'play_count'   => $play_count,
-                                            'thumb'        => $thumb,
-                                            'date'         => $date,
-                                            'category_id'  => $category->id,
-                                            'original_url' => $original_url,
-                                            'play_time'    => $play_time,
-                                            'source_id'    => 1, // 腾讯
-                                            'source_name'  => '腾讯视频', // 腾讯
-                                            'status'       => 1,
-                                            'created_at'   => $time,
-                                            'updated_at'   => $time,
-                                        ];
+                                        if ($videoExtension && $videoKey) {
+                                            $url          = $baseUrl . $videoExtension . '?vkey=' . $videoKey;
+                                            $insertData[] = [
+                                                'url'          => $url,
+                                                'title'        => $title,
+                                                'play_count'   => $play_count,
+                                                'thumb'        => $thumb,
+                                                'date'         => $date,
+                                                'category_id'  => $category->id,
+                                                'original_url' => $original_url,
+                                                'play_time'    => $play_time,
+                                                'source_id'    => 1, // 腾讯
+                                                'source_name'  => '腾讯视频', // 腾讯
+                                                'status'       => 1,
+                                                'created_at'   => $time,
+                                                'updated_at'   => $time,
+                                            ];
+                                        }
                                     }
                                 }
+                                sleep(1);
+                            } catch (\Exception $e) {
+                                myLog('qq_video_error', ['data' => $category->name . '【' . $e->getLine() . '】' . $e->getMessage()]);
+                                sleep(1);
+                                continue;
                             }
-                            sleep(2);
                         }
                         // 写入数据库
                         if ($insertData && count($insertData) > 0) {
                             DB::table('videos')->insert($insertData);
                         }
-                    } else {
-                        myLog('qq_video', ['data' => '【' . $category->id . $category->name . '】获取列表失败']);
-
-                        sleep(1);
-
-                        continue;
                     }
                 } catch (\Exception $e) {
-                    myLog('qq_video', ['data' => $category->name . '【' . $e->getLine() . '】' . $e->getMessage()]);
-
+                    myLog('qq_video_error', ['data' => $category->name . '【' . $e->getLine() . '】' . $e->getMessage()]);
                     sleep(1);
-
                     continue;
                 }
             }
