@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('qq:video')->everyFiveMinutes();
         $schedule->command('qq:game')->everyFiveMinutes();
-        $schedule->command('qq:delete')->everyFiveMinutes();
+        $schedule->command('qq:delete')->hourly();
     }
 
     /**

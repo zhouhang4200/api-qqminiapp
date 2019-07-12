@@ -45,7 +45,7 @@ class QQVideoSpider extends Command
         $categories = Category::whereNotIn('id', [1, 2])->get();
 
         foreach ($categories as $category) {
-            $count = Video::where('category_id', $category->id)->where('date', $date)->count();
+//            $count = Video::where('category_id', $category->id)->where('date', $date)->count();
 
 //            $latestVideo = Video::where('category_id', $category->id)
 //                ->where('date', $date)
