@@ -22,7 +22,7 @@ class VideoController extends Controller
 
             $videos = Video::filter($filters)
                 ->with('category')
-                ->paginate(15);
+                ->paginate(20);
 
             return response()->json([
                 'status' => 0,
@@ -61,7 +61,7 @@ class VideoController extends Controller
                 ->with('category')
                 ->where('videos.id', '>', $video_id)
                 ->oldest('id')
-                ->take(15)
+                ->take(20)
                 ->get();
 
             return response()->json([
