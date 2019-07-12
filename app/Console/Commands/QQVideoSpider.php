@@ -54,9 +54,9 @@ class QQVideoSpider extends Command
 //            $oldestTimestamp = Carbon::parse($latestVideo->updated_at)->addHours(4)->timestamp;
 //            $nowTimestamp = Carbon::now()->timestamp;
 
-            if ($count > 300) {
-                continue;
-            }
+//            if ($count > 300) {
+//                continue;
+//            }
 
             for ($i = 1; $i < 20; $i++) {
                 $timestamp   = Carbon::now()->timestamp;
