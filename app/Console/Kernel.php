@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         'App\Console\Commands\QQVideoSpider', // 爬取二级分类视频地址
         'App\Console\Commands\QQGameSpider', // 爬取游戏和娱乐的一级分类视频地址
-        'App\Console\Commands\DeleteVideoOverDate', // 删除5小时前视频
+        'App\Console\Commands\DeleteVideoOverDate', // 删除6小时前视频
     ];
 
     /**
@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('qq:video')->hourly();
+        $schedule->command('qq:video')->dailyAt(['00:00', '02:00', '05:00', '06:30', '09:30', '14:00', '16:30', '20:00', '22:00']);
         $schedule->command('qq:game')->everyThirtyMinutes();
         $schedule->command('qq:delete')->everyThirtyMinutes();
     }

@@ -20,7 +20,7 @@ class DeleteVideoOverDate extends Command
      *
      * @var string
      */
-    protected $description = '删除5小时前过期视频';
+    protected $description = '删除6小时前过期视频';
 
     /**
      * Create a new command instance.
@@ -40,7 +40,7 @@ class DeleteVideoOverDate extends Command
     public function handle()
     {
         try {
-            $time = Carbon::now()->subHours(5)->toDateTimeString();
+            $time = Carbon::now()->subHours(12)->toDateTimeString();
 
             Video::where('updated_at', '<', $time)->delete();
         } catch (\Exception $e) {
