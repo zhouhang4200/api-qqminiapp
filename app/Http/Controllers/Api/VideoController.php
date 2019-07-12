@@ -22,7 +22,6 @@ class VideoController extends Controller
 
             $videos = Video::filter($filters)
                 ->with('category')
-                ->latest('created_at')
                 ->paginate(15);
 
             return response()->json([
