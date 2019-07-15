@@ -62,10 +62,12 @@ class Video extends Model
                 } else {
                     $query->where('category_id', $filters['category_id']);
                 }
-            } elseif ($filters['category_id'] == 'gz') { // 关注
-                $query->latest('play_count');
+            } elseif ($filters['category_id'] == 'gz' && isset($filters['token'])) { // 关注
+                $user            = User::where('token', $filters['token'])->first();
+                $userCategoryIds = $user->categories()->pluck('categories.id');
+                $query->whereIn('category_id', $userCategoryIds)->latest('play_count')->latest('created_at');
             } elseif ($filters['category_id'] == 'tj') { // 推荐
-                $query->latest('play_count');
+                $query->latest('play_count')->latest('play_count')->latest('created_at');
             } else {
                 $query->where('category_id', $filters['category_id']);
             }
@@ -77,12 +79,6 @@ class Video extends Model
 
         if (isset($filters['date'])) {
             $query->whereBetween('date', $filters['date']);
-        }
-
-        if (isset($filters['token'])) {
-            $user            = User::where('token', $filters['token'])->first();
-            $userCategoryIds = $user->categories()->pluck('categories.id');
-            $query->whereIn('category_id', $userCategoryIds);
         }
 
 //        if ($user = Auth::guard('api')->user()) {

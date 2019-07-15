@@ -41,7 +41,7 @@ class QQVideoSpider extends Command
     public function handle()
     {
         $date = Carbon::now()->toDateString();
-        // 获取所有的除了游戏的分类
+        // 获取所有的除了娱乐和游戏的分类
         $categories = Category::whereNotIn('id', [1, 2])->get();
 
         foreach ($categories as $category) {
@@ -59,7 +59,7 @@ class QQVideoSpider extends Command
 //                continue;
 //            }
 
-            for ($i = 1; $i < 16; $i++) {
+            for ($i = 1; $i < 19; $i++) {
                 $timestamp   = Carbon::now()->timestamp;
                 $rand_number = mt_rand(100, 999);
                 $page        = 15 * $i;
