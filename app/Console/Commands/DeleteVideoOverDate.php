@@ -40,7 +40,7 @@ class DeleteVideoOverDate extends Command
     public function handle()
     {
         try {
-            $time = Carbon::now()->subHours(6)->toDateTimeString();
+            $time = Carbon::now()->subHours(5)->subMinutes(40)->toDateTimeString();
 
             Video::where('updated_at', '<', $time)->delete();
         } catch (\Exception $e) {

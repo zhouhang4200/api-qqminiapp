@@ -82,7 +82,8 @@ class QQVideoSpider extends Command
                                 $original_url = $data->data[0]->webPlayUrl;
                                 $play_time    = $data->data[0]->duration;
                                 // 去重
-                                $video = Video::where('original_url', $original_url)->first();
+                                $video = Video::where('original_url', $original_url)
+                                    ->first();
 
                                 if ($video) {
                                     continue;
@@ -121,7 +122,11 @@ class QQVideoSpider extends Command
                                                 'updated_at'   => $time,
                                             ];
                                         }
+                                    } else {
+                                        continue;
                                     }
+                                } else {
+                                    continue;
                                 }
                             } catch (\Exception $e) {
                                 myLog('qq_video_error', ['data' => $category->name . '【' . $e->getLine() . '】' . $e->getMessage()]);
@@ -132,6 +137,8 @@ class QQVideoSpider extends Command
                         if ($insertData && count($insertData) > 0) {
                             DB::table('videos')->insert($insertData);
                         }
+                    } else {
+                        myLog('qq_video_error', ['data' => $category->name . '无列表数据']);
                     }
                 } catch (\Exception $e) {
                     myLog('qq_video_error', ['data' => $category->name . '【' . $e->getLine() . '】' . $e->getMessage()]);
