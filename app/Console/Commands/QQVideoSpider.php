@@ -118,6 +118,7 @@ class QQVideoSpider extends Command
                                                 'source_id'    => 1, // 腾讯
                                                 'source_name'  => '腾讯视频', // 腾讯
                                                 'status'       => 1,
+                                                'sort'         => mt_rand(100, 999999),
                                                 'created_at'   => $time,
                                                 'updated_at'   => $time,
                                             ];

@@ -125,6 +125,7 @@ class QQGameSpider extends Command
                                 'play_time'    => $play_time,
                                 'source_id'    => 1, // 腾讯
                                 'source_name'  => '腾讯视频', // 腾讯
+                                'sort'         => mt_rand(100, 999999),
                                 'status'       => 1,
                                 'created_at'   => $time,
                                 'updated_at'   => $time,
