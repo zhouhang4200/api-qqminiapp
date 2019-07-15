@@ -1,4 +1,4 @@
-## 今日好看
+# 今日好看
 
 ## 接口文档
 api.miniapp.test/docs
@@ -24,7 +24,7 @@ composer install
 3、在www用户下面增加定时任务
 
 ```
-* * * * * /usr/bin/php /webser/www/game-b/artisan schedule:run >> /dev/null 2>&1
+* * * * * /usr/bin/php /webser/www/qqminiapp/artisan schedule:run >> /dev/null 2>&1
 ```
 
 4、nginx配置
@@ -32,7 +32,7 @@ composer install
 先修改权限
 
 ```
-chown -R www:www /webser/www/game-b/* && chmod -R 755/webser/www/game-b/*
+chown -R www:www /webser/www/qqminiapp/* && chmod -R 755/webser/www/qqminiapp/*
 ```
 nginx 配置，ssl证书配置。
 
@@ -44,7 +44,7 @@ server {
     ssl_certificate    /webser/www/qqminiapp/storage/ssl/*.two002.com.crt;
     ssl_certificate_key /webser/www/qqminiapp/storage/ssl/*.two002.com.key;
 
-    server_name  api.qqminiapp.com;
+    server_name  mini.adhei.com api.mini.adhei.com;
     index index.html index.htm index.php;
     root /webser/www/qqminiapp/public;
 
