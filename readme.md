@@ -1,4 +1,4 @@
-### 今日好看
+## 今日好看
 
 ## 接口文档
 api.miniapp.test/docs
