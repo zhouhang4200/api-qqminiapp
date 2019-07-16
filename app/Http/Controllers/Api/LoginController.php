@@ -8,6 +8,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class LoginController extends Controller
 {
@@ -31,6 +32,10 @@ class LoginController extends Controller
                 $token = $user->token;
 //            $data['openid'] = $user->openid;
 //            $data['token'] = $token;
+
+            Cache::rememberForever($token, function () use ($token) {
+                return User::where('token', $token)->first();
+            });
 
             return response()->json(['status' => 0, 'data' => $token, 'info' => 'success']);
 
