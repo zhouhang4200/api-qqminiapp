@@ -180,6 +180,8 @@ class QQGameSpider extends Command
             $this->getList($category_id, $pageContext, $refreshContext, $date);
         } else {
             myLog('qq_game_error', ['data' => $category_id . '刷新列表的参数未找到']);
+
+            return false;
         }
 
         return true;
@@ -240,14 +242,22 @@ class QQGameSpider extends Command
                     ->timeout(5)
                     ->send();
 
-                if ($response->code == 302) {
-                    $response = Request::get($baseUrl)
-                        ->addHeader('User-Agent', 'User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1')
-                        ->addHeader('Referer', 'https://m.v.qq.com/x/channel/video/game')
-                        ->addHeader('Origin', 'https://m.v.qq.com')
-                        ->timeout(5)
-                        ->send();
-                    myLog('qq_game_error', ['data' => $category_id . '请求的页面返回码不是200']);
+                if ($response->code != 200) {
+                    for ($i = 1; $i < 20; $i++) {
+                        $response = Request::get($baseUrl)
+                            ->addHeader('User-Agent', 'User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1')
+                            ->addHeader('Referer', 'https://m.v.qq.com/x/channel/video/game')
+                            ->addHeader('Origin', 'https://m.v.qq.com')
+                            ->timeout(5)
+                            ->send();
+                        myLog('qq_game_error', ['data' => $category_id . '请求的页面返回码不是200']);
+
+                        if ($response->code == 200) {
+                            continue;
+                        }
+
+                        sleep(1);
+                    }
                 }
 
                 $html = $response->body;
