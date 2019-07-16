@@ -67,7 +67,7 @@ class Video extends Model
                 $userCategoryIds = $user->categories()->pluck('categories.id');
                 $query->whereIn('category_id', $userCategoryIds)->latest('sort');
             } elseif ($filters['category_id'] == 'tj') { // 推荐
-                $query->latest('play_count')->latest('sort');
+                $query->latest('sort');
             } else {
                 $query->where('category_id', $filters['category_id']);
             }
