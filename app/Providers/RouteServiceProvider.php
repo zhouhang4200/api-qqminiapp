@@ -36,11 +36,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        if(request()->getHost() == config('spider.api_domain')) {
-            $this->mapApiRoutes();
-        }
-
-        $this->mapWebRoutes();
+        $this->mapApiRoutes();
+//        if(request()->getHost() == config('spider.api_domain')) {
+//        }
+//
+//        $this->mapWebRoutes();
 
         //
     }
