@@ -160,6 +160,7 @@ class QQGameSpider extends Command
             }
         } else {
             myLog('qq_game_error', ['data' => $category_id . '图片和视频id没找到']);
+            return false;
         }
 
         // 两个类目的列表页的正则不一样
@@ -171,7 +172,7 @@ class QQGameSpider extends Command
 //            preg_match_all('~\<div class=\\\"hide\\"\>responsedata=\/\*\{&quot;channelTag&quot;:&quot;game&quot;,&quot;pageContext&quot;:&quot;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot;,&quot;hasNextPage&quot;:true\}\*\/\<\/div\>~', $infoContent, $matches);
             preg_match_all('~\<div class=\"hide\"\>responsedata=\/\*\{&quot;channelTag&quot;:&quot;game&quot;,&quot;pageContext&quot;:&quot;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot;,&quot;hasNextPage&quot;:true\}\*\/\<\/div\>~', $infoContent, $matches);
         } else {
-            $matches = [];
+            return false;
         }
 
         if ($matches && count($matches) > 0 && count($matches[1]) > 0) {
@@ -184,7 +185,7 @@ class QQGameSpider extends Command
             return false;
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -253,7 +254,7 @@ class QQGameSpider extends Command
                         myLog('qq_game_error', ['data' => $category_id . '请求的页面返回码不是200']);
 
                         if ($response->code == 200) {
-                            continue;
+                            break;
                         }
 
                         sleep(1);
