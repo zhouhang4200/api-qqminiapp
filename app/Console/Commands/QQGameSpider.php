@@ -157,6 +157,8 @@ class QQGameSpider extends Command
 
             if ($insertData && count($insertData) > 0) {
                 DB::table('videos')->insert($insertData);
+            } else {
+                return false;
             }
         } else {
             myLog('qq_game_error', ['data' => $category_id . '图片和视频id没找到']);
