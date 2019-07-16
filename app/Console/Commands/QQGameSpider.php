@@ -75,14 +75,29 @@ class QQGameSpider extends Command
             return false;
         }
 
+        Request::get('https://m.v.qq.com/')
+            ->addHeader('User-Agent', 'User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1')
+            ->addHeader('Referer', 'https://m.v.qq.com')
+            ->addHeader('Origin', 'https://m.v.qq.com')
+            ->timeout(5)
+            ->send();
+
         // 获取列表页面
-        $client       = new Client();
-        $infoResponse = $client->request('GET', $url);
-        $infoContent  = $infoResponse->getBody()->getContents();
+        $request = Request::get($url)
+            ->addHeader('User-Agent', 'User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1')
+            ->addHeader('Referer', 'https://m.v.qq.com/x/channel/video/game')
+            ->addHeader('Origin', 'https://m.v.qq.com')
+            ->timeout(5)
+            ->send();
+        $infoContent = $request->body->html;
+
+//        $client       = new Client();
+//        $infoResponse = $client->request('GET', $url);
+//        $infoContent  = $infoResponse->getBody()->getContents();
 
         // 视频图片和视频id
-        preg_match_all('~class=\\\"poster\\\" dsrc=\\\"(.*?)\\\"~', $infoContent, $thumbs);
-        preg_match_all('~data-vid=\\\"(.*?)\\\"\>~', $infoContent, $video_ids);
+        preg_match_all('~class=\"poster\" dsrc=\"(.*?)\"~', $infoContent, $thumbs);
+        preg_match_all('~data-vid=\"(.*?)\"\>~', $infoContent, $video_ids);
 
         if ($thumbs && count($thumbs) > 0) {
             $insertData = [];
@@ -95,6 +110,7 @@ class QQGameSpider extends Command
                     if ($video) {
                         continue;
                     }
+
                     $infoUrl       = "https://h5vv.video.qq.com/getinfo?callback=txplayerJsonpCallBack_getinfo_934380&&charge=0&defaultfmt=auto&otype=json&guid=a96d6368975b40fd9fc8a7eb5d3a45e4&flowid=e8af7e3800936921036d09289f74f5ae_11001&platform=11001&sdtfrom=v3010&defnpayver=0&appVer=3.4.40&host=m.v.qq.com&ehost=https%3A%2F%2Fm.v.qq.com%2Fx%2Fchannel%2Fvideo%2Frecreation&refer=m.v.qq.com&sphttps=1&sphls=&_rnd=" . $timestamp . "&spwm=4&vid=" . $video_id . "&defn=auto&fhdswitch=&show1080p=false&dtype=1&clip=4&defnsrc=&fmt=auto&defsrc=1&_qv_rmt=C103p%2BIKA16110pdw%3D&_qv_rmt2=jw5bfArY152401F2g%3D&_" . $timestamp . "111=";
                     $client        = new Client();
                     $infoResponse  = $client->request('GET', $infoUrl);
@@ -149,11 +165,11 @@ class QQGameSpider extends Command
         // 两个类目的列表页的正则不一样
         if ($category_id == 2) {
 //            preg_match_all('~\<div class=\"hide\"\>responsedata=\/\*\{&quot\;channelTag&quot\;\:\&quot\;recreation\&quot\;\,\&quot\;pageContext\&quot\;\:&quot\;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot\;\,\&quot\;hasNextPage&quot\;\:true\}\*\/\<\/div\>~', $infoContent, $matches);
-            preg_match_all('~\<div class=\\\"hide\\\"\>responsedata=\/\*\{&quot\;channelTag&quot\;\:\&quot\;recreation\&quot\;\,\&quot\;pageContext\&quot\;\:&quot\;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot\;\,\&quot\;hasNextPage&quot\;\:true\}\*\/\<\/div\>~', $infoContent, $matches);
+            preg_match_all('~\<div class=\"hide\"\>responsedata=\/\*\{&quot\;channelTag&quot\;\:\&quot\;recreation\&quot\;\,\&quot\;pageContext\&quot\;\:&quot\;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot\;\,\&quot\;hasNextPage&quot\;\:true\}\*\/\<\/div\>~', $infoContent, $matches);
         } elseif ($category_id == 1) {
 //                    preg_match_all('~\<div class=\"hide\"\>responsedata=\/\*\{\&quot\;channelTag&quot\;\:\&quot\;recreation\&quot\;\,\&quot\;pageContext\&quot\;\:&quot\;(.*?)\&quot\;\,\&quot\;refreshContext\&quot\;\:\&quot\;(.*?)&quot\;\,&quot\;hasNextPage&quot\;\:true\}\*\/\<\/div\>~', $html, $matches);
 //            preg_match_all('~\<div class=\\\"hide\\"\>responsedata=\/\*\{&quot;channelTag&quot;:&quot;game&quot;,&quot;pageContext&quot;:&quot;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot;,&quot;hasNextPage&quot;:true\}\*\/\<\/div\>~', $infoContent, $matches);
-            preg_match_all('~\<div class=\\\"hide\\\"\>responsedata=\/\*\{&quot;channelTag&quot;:&quot;game&quot;,&quot;pageContext&quot;:&quot;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot;,&quot;hasNextPage&quot;:true\}\*\/\<\/div\>~', $infoContent, $matches);
+            preg_match_all('~\<div class=\"hide\"\>responsedata=\/\*\{&quot;channelTag&quot;:&quot;game&quot;,&quot;pageContext&quot;:&quot;(.*?)&quot;,&quot;refreshContext&quot;:&quot;(.*?)&quot;,&quot;hasNextPage&quot;:true\}\*\/\<\/div\>~', $infoContent, $matches);
         } else {
             $matches = [];
         }
@@ -205,12 +221,32 @@ class QQGameSpider extends Command
 //                $page->goto($baseUrl, ['timeout' => 60000]);
 //                $html = $page->content(); // Prints the HTML
                 // 游戏地址可能会出错
-                $response = Request::get($baseUrl)
-                    ->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1')
+//                $response = Request::get($baseUrl)
+//                    ->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1')
+//                    ->timeout(5)
+//                    ->send();
+                Request::get('https://m.v.qq.com/')
+                    ->addHeader('User-Agent', 'User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1')
+                    ->addHeader('Referer', 'https://m.v.qq.com')
+                    ->addHeader('Origin', 'https://m.v.qq.com')
+                    ->addHeader('Cookie', 'tvfe_boss_uuid=811fc245cae92e3c; pgv_pvid=1785754680; video_guid=abe1775f4abed715; video_platform=2; pgv_info=ssid=s5618657060; ts_uid=2178948544; bucket_id=9231006; ts_uid=2178948544; tvfe_search_uid=37534ad1-6c87-46a8-aa21-b362510639c6; pgv_pvi=8306183168; pgv_si=s7223673856; ptisp=ctc; ptui_loginuin=2112823004; RK=q/b9KkN5Qf; ptcz=dd154c888b733477ae9b0f96a72e925391afcc780f8bc2a4befca917b0c78bbc; searchSession=qid=4GQeqJs_Q9jn84d_fiUIQMgzy08YdPCclcWwBNix8KdDOpQ_oCZxWg; qv_als=bRU2c6m0gVqaBknMA11563242957kzeKfg==; qv_als=jh2AtZWBPsZsNJDuA11563243101+6tJAw==; ptag=m_v_qq_com; ts_last=v.qq.com/; ts_refer=m.v.qq.com/')
                     ->timeout(5)
                     ->send();
 
-                if ($response->code != 200) {
+                $response = Request::get($baseUrl)
+                    ->addHeader('User-Agent', 'User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1')
+                    ->addHeader('Referer', 'https://m.v.qq.com/x/channel/video/game')
+                    ->addHeader('Origin', 'https://m.v.qq.com')
+                    ->timeout(5)
+                    ->send();
+
+                if ($response->code == 302) {
+                    $response = Request::get($baseUrl)
+                        ->addHeader('User-Agent', 'User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1')
+                        ->addHeader('Referer', 'https://m.v.qq.com/x/channel/video/game')
+                        ->addHeader('Origin', 'https://m.v.qq.com')
+                        ->timeout(5)
+                        ->send();
                     myLog('qq_game_error', ['data' => $category_id . '请求的页面返回码不是200']);
                 }
 

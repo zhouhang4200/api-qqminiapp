@@ -29,6 +29,14 @@ class VideoController extends Controller
                 'info' => '获取成功',
                 'data' => $videos
             ]);
+        } catch (QqException $e) {
+            myLog('video_error', ['info' => '【'.$e->getLine().'】:'.$e->getMessage()]);
+
+            return response()->json([
+                'status' => 10000,
+                'info' => $e->getMessage(),
+                'data' => false
+            ]);
         } catch (\Exception $e) {
             myLog('video_error', ['info' => '【'.$e->getLine().'】:'.$e->getMessage()]);
 

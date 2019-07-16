@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Exceptions\QqException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class Video extends Model
 {
@@ -29,43 +31,29 @@ class Video extends Model
     public static function scopeFilter($query, $filters = [])
     {
         if (isset($filters['category_id'])) {
-            if ($filters['category_id'] == 4) { // 动漫取所有
+            // 游戏，娱乐，动漫
+            if (in_array($filters['category_id'], [1, 2, 4])) {
                 $date  = Carbon::now()->toDateString();
-                $count = Video::where('category_id', 4)->where('date', $date)->count();
+                $count = Video::where('category_id', $filters['category_id'])->where('date', $date)->count();
 
                 if ($count < 400) {
-                    $categoryIds = Category::find(4)->children()->pluck('id')->merge(4);
+                    $categoryIds = Category::find($filters['category_id'])->children()->pluck('id')->merge($filters['category_id']);
                     $query->whereIn('category_id', $categoryIds)->latest('sort');
                 } else {
                     $query->where('category_id', $filters['category_id']);
                 }
-            } elseif ($filters['category_id'] == 1) { // 游戏，游戏接口不稳定，取不到的时候，取子分类游戏
-                $date  = Carbon::now()->toDateString();
-                $count = Video::where('category_id', 1)->where('date', $date)->count();
+            } elseif ($filters['category_id'] == 'gz') { // 关注
+                if (isset($filters['token'])) {
+                    $user            = Cache::get($filters['token']);
 
-                if ($count < 400) {
-                    $categoryIds = Category::find(1)->children()->pluck('id');
-                    $query->whereIn('category_id', $categoryIds)->latest('sort');
+                    if (!$user) {
+                        throw new QqException('token错误');
+                    }
+                    $userCategoryIds = $user->categories()->pluck('categories.id');
+                    $query->whereIn('category_id', $userCategoryIds)->latest('sort');
                 } else {
-                    $query->where('category_id', $filters['category_id']);
+                    throw new QqException('token参数不可为空');
                 }
-            } elseif ($filters['category_id'] == 2) { // 娱乐
-                $date  = Carbon::now()->toDateString();
-                $count = Video::where('category_id', 2)->where('date', $date)->count();
-
-                if ($count < 100) {
-                    $categoryIds = Category::find(2)->children()->pluck('id')->merge(2);
-                    $query->whereIn('category_id', $categoryIds);
-                } elseif ($count < 400) {
-                    $categoryIds = Category::find(2)->children()->pluck('id')->merge(2);
-                    $query->whereIn('category_id', $categoryIds)->latest('sort');
-                } else {
-                    $query->where('category_id', $filters['category_id']);
-                }
-            } elseif ($filters['category_id'] == 'gz' && isset($filters['token'])) { // 关注
-                $user            = User::where('token', $filters['token'])->first();
-                $userCategoryIds = $user->categories()->pluck('categories.id');
-                $query->whereIn('category_id', $userCategoryIds)->latest('sort');
             } elseif ($filters['category_id'] == 'tj') { // 推荐
                 $query->latest('sort');
             } else {
